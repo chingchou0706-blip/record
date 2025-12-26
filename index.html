@@ -1,10 +1,18 @@
 <!doctype html>
 <html lang="zh-TW" class="h-full">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>智慧記帳APP - Deep Link版</title>
 
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#667eea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="智慧記帳">
+
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -21,7 +29,6 @@
 
 <body class="h-full">
   <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-
     <div id="main-screen" class="h-full flex flex-col">
       <header class="px-6 pt-8 pb-6">
         <div class="flex items-center justify-between mb-2">
@@ -49,7 +56,6 @@
           <h2 class="text-lg font-bold mb-3" style="color: #2d3748;">本月分類支出</h2>
           <div id="category-stats" class="space-y-2"></div>
         </section>
-
         <section>
           <h2 class="text-lg font-bold mb-3" style="color: #2d3748;">最近記錄</h2>
           <div id="recent-records" class="space-y-2"></div>
@@ -67,7 +73,6 @@
       <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background: #f8f9fa;">
         <div class="bg-white rounded-2xl p-5 shadow-sm mb-4">
           <h3 class="font-bold text-lg mb-4" style="color: #2d3748;">📅 篩選條件</h3>
-
           <div class="space-y-4">
             <div>
               <label class="block text-sm font-semibold mb-2 text-gray-700">時間區間</label>
@@ -154,7 +159,7 @@
           <div class="mb-4">
             <label class="block text-sm font-semibold mb-2 text-gray-700">載具號碼</label>
             <input type="text" id="carrier-number-input" placeholder="例如: /ABC1234" class="w-full px-4 py-3 rounded-xl border-2 text-lg font-mono" style="border-color: #e2e8f0;" maxlength="8">
-            <p class="text-xs text-gray-500 mt-2">請輸入完整載具號碼，包含開頭的 /</p>
+            <p class="text-xs text-gray-500 mt-2">請輸入完整載具號碼（包含開頭的 /）</p>
           </div>
 
           <div id="carrier-preview" class="hidden mb-4">
@@ -162,16 +167,16 @@
             <div class="bg-gray-50 rounded-xl p-4 border-2" style="border-color: #e2e8f0;">
               <div class="bg-white p-4 rounded-lg">
                 <svg viewBox="0 0 200 60" class="w-full">
-                  <rect x="5" y="5" width="2" height="50" fill="#000" />
-                  <rect x="10" y="5" width="3" height="50" fill="#000" />
-                  <rect x="16" y="5" width="2" height="50" fill="#000" />
-                  <rect x="21" y="5" width="4" height="50" fill="#000" />
-                  <rect x="28" y="5" width="2" height="50" fill="#000" />
-                  <rect x="33" y="5" width="5" height="50" fill="#000" />
-                  <rect x="41" y="5" width="2" height="50" fill="#000" />
-                  <rect x="46" y="5" width="3" height="50" fill="#000" />
-                  <rect x="52" y="5" width="2" height="50" fill="#000" />
-                  <rect x="57" y="5" width="4" height="50" fill="#000" />
+                  <rect x="5" y="5" width="2" height="50" fill="#000"/>
+                  <rect x="10" y="5" width="3" height="50" fill="#000"/>
+                  <rect x="16" y="5" width="2" height="50" fill="#000"/>
+                  <rect x="21" y="5" width="4" height="50" fill="#000"/>
+                  <rect x="28" y="5" width="2" height="50" fill="#000"/>
+                  <rect x="33" y="5" width="5" height="50" fill="#000"/>
+                  <rect x="41" y="5" width="2" height="50" fill="#000"/>
+                  <rect x="46" y="5" width="3" height="50" fill="#000"/>
+                  <rect x="52" y="5" width="2" height="50" fill="#000"/>
+                  <rect x="57" y="5" width="4" height="50" fill="#000"/>
                 </svg>
               </div>
               <p class="text-center text-sm font-mono mt-2" id="carrier-preview-text">/ABC1234</p>
@@ -203,7 +208,6 @@
 
       <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background: #f8f9fa;">
         <div id="category-grid" class="grid grid-cols-3 gap-4 mb-6"></div>
-
         <button id="add-category-btn" class="w-full py-3 rounded-xl border-2 border-dashed text-gray-600 font-semibold" style="border-color: #cbd5e0;">
           <span class="text-xl mr-2">+</span> 新增分類
         </button>
@@ -235,32 +239,32 @@
 
             <div class="bg-white p-6 rounded-xl border-2" style="border-color: #e2e8f0;">
               <svg viewBox="0 0 200 80" class="w-full">
-                <rect x="5" y="10" width="3" height="60" fill="#000" />
-                <rect x="12" y="10" width="2" height="60" fill="#000" />
-                <rect x="18" y="10" width="4" height="60" fill="#000" />
-                <rect x="26" y="10" width="2" height="60" fill="#000" />
-                <rect x="32" y="10" width="6" height="60" fill="#000" />
-                <rect x="42" y="10" width="2" height="60" fill="#000" />
-                <rect x="48" y="10" width="4" height="60" fill="#000" />
-                <rect x="56" y="10" width="2" height="60" fill="#000" />
-                <rect x="62" y="10" width="3" height="60" fill="#000" />
-                <rect x="69" y="10" width="5" height="60" fill="#000" />
-                <rect x="78" y="10" width="2" height="60" fill="#000" />
-                <rect x="84" y="10" width="4" height="60" fill="#000" />
-                <rect x="92" y="10" width="2" height="60" fill="#000" />
-                <rect x="98" y="10" width="6" height="60" fill="#000" />
-                <rect x="108" y="10" width="3" height="60" fill="#000" />
-                <rect x="115" y="10" width="2" height="60" fill="#000" />
-                <rect x="121" y="10" width="5" height="60" fill="#000" />
-                <rect x="130" y="10" width="2" height="60" fill="#000" />
-                <rect x="136" y="10" width="4" height="60" fill="#000" />
-                <rect x="144" y="10" width="3" height="60" fill="#000" />
-                <rect x="151" y="10" width="2" height="60" fill="#000" />
-                <rect x="157" y="10" width="6" height="60" fill="#000" />
-                <rect x="167" y="10" width="2" height="60" fill="#000" />
-                <rect x="173" y="10" width="4" height="60" fill="#000" />
-                <rect x="181" y="10" width="3" height="60" fill="#000" />
-                <rect x="188" y="10" width="2" height="60" fill="#000" />
+                <rect x="5" y="10" width="3" height="60" fill="#000"/>
+                <rect x="12" y="10" width="2" height="60" fill="#000"/>
+                <rect x="18" y="10" width="4" height="60" fill="#000"/>
+                <rect x="26" y="10" width="2" height="60" fill="#000"/>
+                <rect x="32" y="10" width="6" height="60" fill="#000"/>
+                <rect x="42" y="10" width="2" height="60" fill="#000"/>
+                <rect x="48" y="10" width="4" height="60" fill="#000"/>
+                <rect x="56" y="10" width="2" height="60" fill="#000"/>
+                <rect x="62" y="10" width="3" height="60" fill="#000"/>
+                <rect x="69" y="10" width="5" height="60" fill="#000"/>
+                <rect x="78" y="10" width="2" height="60" fill="#000"/>
+                <rect x="84" y="10" width="4" height="60" fill="#000"/>
+                <rect x="92" y="10" width="2" height="60" fill="#000"/>
+                <rect x="98" y="10" width="6" height="60" fill="#000"/>
+                <rect x="108" y="10" width="3" height="60" fill="#000"/>
+                <rect x="115" y="10" width="2" height="60" fill="#000"/>
+                <rect x="121" y="10" width="5" height="60" fill="#000"/>
+                <rect x="130" y="10" width="2" height="60" fill="#000"/>
+                <rect x="136" y="10" width="4" height="60" fill="#000"/>
+                <rect x="144" y="10" width="3" height="60" fill="#000"/>
+                <rect x="151" y="10" width="2" height="60" fill="#000"/>
+                <rect x="157" y="10" width="6" height="60" fill="#000"/>
+                <rect x="167" y="10" width="2" height="60" fill="#000"/>
+                <rect x="173" y="10" width="4" height="60" fill="#000"/>
+                <rect x="181" y="10" width="3" height="60" fill="#000"/>
+                <rect x="188" y="10" width="2" height="60" fill="#000"/>
               </svg>
             </div>
 
@@ -360,9 +364,8 @@
             <div class="absolute inset-0 w-32 h-32 rounded-full pulse-ring" id="pulse-ring" style="background: rgba(0, 185, 0, 0.3);"></div>
             <div class="w-32 h-32 rounded-3xl mx-auto flex items-center justify-center text-6xl shadow-2xl relative z-10" id="redirect-payment-icon" style="background: #00B900;">💚</div>
           </div>
-
           <h2 class="text-white text-2xl font-bold mb-3" id="redirect-payment-name">LINE Pay</h2>
-          <p class="text-white text-lg opacity-75 mb-6">正在啟動支付 APP...</p>
+          <p class="text-white text-lg opacity-75 mb-8">正在啟動支付 APP...</p>
 
           <div class="flex justify-center space-x-2 mb-8">
             <div class="w-3 h-3 bg-white rounded-full animate-bounce" style="animation-delay: 0s;"></div>
@@ -372,14 +375,15 @@
 
           <div class="bg-white bg-opacity-10 rounded-2xl p-4 backdrop-blur-lg max-w-sm mx-auto">
             <p class="text-white text-xs opacity-75 mb-2">🔗 Deep Link URL</p>
-            <p class="text-white text-xs font-mono break-all opacity-60" id="deep-link-url">line://pay/generateQR</p>
+            <p class="text-white text-xs font-mono break-all opacity-50" id="deep-link-url"></p>
           </div>
 
-          <button id="open-app-again-btn" class="mt-6 w-full max-w-sm py-3 rounded-xl text-white font-semibold" style="background: rgba(255,255,255,0.18);">
-            如果沒有自動跳轉，點此再試一次
-          </button>
+          <div class="mt-6 space-y-3">
+            <button id="open-deeplink-now" class="w-full max-w-sm mx-auto py-4 rounded-2xl text-white font-semibold" style="background: rgba(255,255,255,0.15);">立即開啟支付 App</button>
+            <button id="back-to-app-btn" class="w-full max-w-sm mx-auto py-4 rounded-2xl text-white font-semibold" style="background: rgba(255,255,255,0.08);">我已完成付款，回到記帳</button>
+          </div>
 
-          <p class="text-white text-xs opacity-50 mt-4">若未安裝該支付 App，iOS 可能不會有任何反應。</p>
+          <p class="text-white text-xs opacity-40 mt-6">提示：若未安裝該支付 App，iOS 可能不會跳轉。</p>
         </div>
       </div>
     </div>
@@ -396,7 +400,7 @@
           </div>
         </div>
         <h1 class="text-white text-2xl font-bold mb-1" id="external-app-title">LINE Pay</h1>
-        <p class="text-white text-sm opacity-75">付款確認（示範畫面）</p>
+        <p class="text-white text-sm opacity-75">付款確認（示範）</p>
       </div>
 
       <div class="flex-1 flex flex-col" style="background: #f0f0f0;">
@@ -405,6 +409,7 @@
             <div class="text-center mb-6">
               <div class="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl" id="external-icon" style="background: #f0f0f0;">💚</div>
               <p class="text-sm text-gray-500 mb-3">付款金額</p>
+
               <div class="mb-6">
                 <input type="number" id="external-amount-input" placeholder="請輸入金額" class="text-5xl font-bold text-center border-0 outline-none bg-transparent w-full" style="color: #2d3748;" inputmode="decimal" value="">
                 <div class="flex items-center justify-center mt-2"><span class="text-lg text-gray-400">NT$</span></div>
@@ -417,15 +422,12 @@
             </div>
 
             <div class="space-y-3 border-t pt-4" style="border-color: #e2e8f0;">
-              <div class="flex justify-between text-sm py-1"><span class="text-gray-500">可用餘額</span><span class="font-semibold text-green-600">NT$ 8,520</span></div>
-              <div class="flex justify-between text-sm py-1"><span class="text-gray-500">付款後餘額</span><span class="font-semibold" style="color: #2d3748;" id="remaining-balance">NT$ 8,520</span></div>
+              <div class="flex justify-between text-sm py-1"><span class="text-gray-500">可用餘額</span> <span class="font-semibold text-green-600">NT$ 8,520</span></div>
+              <div class="flex justify-between text-sm py-1"><span class="text-gray-500">付款後餘額</span> <span class="font-semibold" style="color: #2d3748;" id="remaining-balance">NT$ 8,520</span></div>
             </div>
           </div>
 
-          <button id="confirm-external-payment-btn" class="w-full max-w-sm py-5 rounded-2xl text-white text-lg font-bold shadow-lg mb-3" style="background: #00B900;">
-            <span id="confirm-btn-text">確認付款</span>
-          </button>
-
+          <button id="confirm-external-payment-btn" class="w-full max-w-sm py-5 rounded-2xl text-white text-lg font-bold shadow-lg mb-3" style="background: #00B900;"><span id="confirm-btn-text">確認付款</span></button>
           <button id="cancel-external-payment-btn" class="w-full max-w-sm py-4 rounded-2xl font-semibold" style="background: #e2e8f0; color: #666;">取消</button>
         </div>
 
@@ -434,7 +436,7 @@
             <span class="text-lg">🔒</span>
             <div>
               <p class="text-xs font-semibold mb-1" style="color: #2d3748;">安全提示</p>
-              <p class="text-xs text-gray-500">本畫面為示範｜實際使用時會在真實的支付 App 中完成付款</p>
+              <p class="text-xs text-gray-500">此畫面為示範｜實際使用時將於真實支付 App 完成付款</p>
             </div>
           </div>
         </div>
@@ -448,7 +450,6 @@
             <div class="absolute inset-0 w-32 h-32 rounded-full bg-white opacity-20 animate-ping"></div>
             <div class="w-32 h-32 rounded-full mx-auto flex items-center justify-center bg-white shadow-2xl relative z-10"><span class="text-7xl">✓</span></div>
           </div>
-
           <h2 class="text-white text-3xl font-bold mb-3">付款成功！</h2>
 
           <div class="bg-white bg-opacity-20 rounded-2xl px-8 py-5 mb-6 backdrop-blur-lg">
@@ -458,7 +459,7 @@
           </div>
 
           <div class="mb-6">
-            <p class="text-white text-base opacity-90 mb-3">正在返回記帳 App...</p>
+            <p class="text-white text-base opacity-90 mb-3">正在返回記帳 APP...</p>
             <div class="flex justify-center space-x-2">
               <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
               <div class="w-2 h-2 bg-white rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
@@ -498,633 +499,704 @@
           </div>
         </div>
 
-        <button id="save-expense-btn" class="w-full py-4 rounded-xl text-white font-semibold text-lg shadow-lg" style="background: #667eea;">
-          <span id="save-btn-text">儲存記錄</span>
-        </button>
+        <button id="save-expense-btn" class="w-full py-4 rounded-xl text-white font-semibold text-lg shadow-lg" style="background: #667eea;"><span id="save-btn-text">儲存記錄</span></button>
       </div>
     </div>
-
   </div>
 
-  <script>
-    const defaultConfig = { app_title: "智慧記帳", currency_symbol: "NT$" };
+<script>
+  const defaultConfig = { app_title: "智慧記帳", currency_symbol: "NT$" };
 
-    let allRecords = [];
-    let carrierSettings = null;
+  const localStoreKey = "smart-expense-records-v1";
+  const localStoreSettingsKey = "smart-expense-carrier-settings-v1";
 
-    let currentFlow = {
-      category: "",
-      paymentMethod: "",
-      paymentColor: "",
-      paymentEmoji: "",
-      carrierUsed: false,
-      pendingAmount: 0
-    };
+  let allRecords = [];
+  let carrierSettings = null;
+  let currentFlow = { category: "", paymentMethod: "", paymentColor: "", paymentEmoji: "", carrierUsed: false, pendingAmount: 0 };
 
-    const defaultCategories = ["早餐", "午餐", "晚餐", "交通", "娛樂", "購物", "其他"];
-    let customCategories = [];
+  const defaultCategories = ["早餐", "午餐", "晚餐", "交通", "娛樂", "購物", "其他"];
+  let customCategories = [];
 
-    let analysisFilters = { startDate: null, endDate: null, category: "all", minAmount: null, maxAmount: null };
+  let analysisFilters = { startDate: null, endDate: null, category: "all", minAmount: null, maxAmount: null };
 
-    function safeGetStore() {
-      try {
-        const k = "__t__";
-        localStorage.setItem(k, "1");
-        localStorage.removeItem(k);
-        return localStorage;
-      } catch {
-        return null;
-      }
-    }
-    const store = safeGetStore();
+  function safeCurrency() {
+    return (window.elementSdk?.config?.currency_symbol || defaultConfig.currency_symbol);
+  }
 
-    function loadFromLocal() {
-      if (!store) return;
-      try {
-        const raw = store.getItem("records_v1");
-        const rawSettings = store.getItem("carrier_settings_v1");
-        allRecords = raw ? JSON.parse(raw) : [];
-        carrierSettings = rawSettings ? JSON.parse(rawSettings) : null;
-      } catch {
-        allRecords = [];
-        carrierSettings = null;
-      }
-    }
+  function showSuccessMessage(message) {
+    const messageDiv = document.createElement("div");
+    messageDiv.textContent = message;
+    messageDiv.className = "fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50";
+    document.body.appendChild(messageDiv);
+    setTimeout(() => messageDiv.remove(), 2000);
+  }
 
-    function saveToLocal() {
-      if (!store) return;
-      store.setItem("records_v1", JSON.stringify(allRecords));
-      store.setItem("carrier_settings_v1", JSON.stringify(carrierSettings));
-    }
+  function showErrorMessage(message) {
+    const messageDiv = document.createElement("div");
+    messageDiv.textContent = message;
+    messageDiv.className = "fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg z-50";
+    document.body.appendChild(messageDiv);
+    setTimeout(() => messageDiv.remove(), 2200);
+  }
 
-    async function onConfigChange(config) {
-      document.querySelectorAll("#app-title").forEach(el => el.textContent = config.app_title || defaultConfig.app_title);
-
-      const currency = config.currency_symbol || defaultConfig.currency_symbol;
-      document.querySelectorAll("#currency-symbol, #currency-symbol-input, #success-currency, #analysis-currency-1, #analysis-currency-2, #analysis-currency-3")
-        .forEach(el => el.textContent = currency);
-    }
-
-    function updateCarrierDisplay() {
-      if (carrierSettings && carrierSettings.carrier_number) {
-        const carrierText = carrierSettings.carrier_number;
-        document.getElementById("carrier-display-text").textContent = carrierText;
-        document.getElementById("carrier-number-input").value = carrierText;
-        document.getElementById("carrier-preview-text").textContent = carrierText;
-        document.getElementById("carrier-preview").classList.remove("hidden");
+  function showScreen(screenId) {
+    const screens = ["main-screen","analysis-screen","settings-screen","step1-screen","step2-screen","step3-screen","step4-screen","payment-redirect-screen","external-payment-screen","payment-success-screen"];
+    screens.forEach(id => {
+      const screen = document.getElementById(id);
+      if (id === screenId) {
+        screen.classList.remove("hidden");
+        screen.classList.add("flex","fade-in");
       } else {
-        document.getElementById("carrier-display-text").textContent = "/ABC1234";
-        document.getElementById("carrier-number-input").value = "";
-        document.getElementById("carrier-preview").classList.add("hidden");
+        screen.classList.add("hidden");
+        screen.classList.remove("flex");
       }
+    });
+  }
+
+  function loadLocal() {
+    try {
+      const raw = localStorage.getItem(localStoreKey);
+      const arr = raw ? JSON.parse(raw) : [];
+      allRecords = Array.isArray(arr) ? arr : [];
+    } catch { allRecords = []; }
+
+    try {
+      const rawS = localStorage.getItem(localStoreSettingsKey);
+      carrierSettings = rawS ? JSON.parse(rawS) : null;
+    } catch { carrierSettings = null; }
+
+    allRecords = allRecords.filter(r => r && r.is_settings !== true);
+    allRecords.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+  }
+
+  function saveLocalRecords() {
+    localStorage.setItem(localStoreKey, JSON.stringify(allRecords));
+  }
+
+  function saveLocalSettings() {
+    localStorage.setItem(localStoreSettingsKey, JSON.stringify(carrierSettings));
+  }
+
+  const fallbackDataSdk = {
+    async init(handler) {
+      loadLocal();
+      handler.onDataChanged([{...carrierSettings, is_settings:true}].filter(Boolean).concat(allRecords));
+      return { isOk: true };
+    },
+    async create(record) {
+      if (record?.is_settings === true) {
+        carrierSettings = record;
+        saveLocalSettings();
+      } else {
+        allRecords.unshift(record);
+        saveLocalRecords();
+      }
+      updateUI();
+      updateCarrierDisplay();
+      return { isOk: true };
+    },
+    async update(record) {
+      if (record?.is_settings === true) {
+        carrierSettings = record;
+        saveLocalSettings();
+      } else {
+        const idx = allRecords.findIndex(r => r.id === record.id);
+        if (idx >= 0) allRecords[idx] = record;
+        saveLocalRecords();
+      }
+      updateUI();
+      updateCarrierDisplay();
+      return { isOk: true };
+    }
+  };
+
+  const dataSdkSafe = {
+    async init(handler) {
+      if (window.dataSdk?.init) {
+        const res = await window.dataSdk.init({
+          onDataChanged(data) {
+            const settings = data.find(r => r.is_settings === true);
+            const expenses = data.filter(r => r.is_settings !== true);
+            carrierSettings = settings || null;
+            allRecords = expenses.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            updateUI();
+            updateCarrierDisplay();
+          }
+        });
+        if (!res?.isOk) {
+          await fallbackDataSdk.init(handler);
+        }
+        return res;
+      }
+      return await fallbackDataSdk.init(handler);
+    },
+    async create(record) {
+      if (window.dataSdk?.create) return await window.dataSdk.create(record);
+      return await fallbackDataSdk.create(record);
+    },
+    async update(record) {
+      if (window.dataSdk?.update) return await window.dataSdk.update(record);
+      return await fallbackDataSdk.update(record);
+    }
+  };
+
+  async function onConfigChange(config) {
+    document.querySelectorAll("#app-title").forEach(el => el.textContent = config.app_title || defaultConfig.app_title);
+    document.querySelectorAll("#currency-symbol, #currency-symbol-input, #success-currency, #analysis-currency-1, #analysis-currency-2, #analysis-currency-3").forEach(el => el.textContent = config.currency_symbol || defaultConfig.currency_symbol);
+  }
+
+  function updateCarrierDisplay() {
+    const carrierText = (carrierSettings && carrierSettings.carrier_number) ? carrierSettings.carrier_number : "";
+    if (carrierText) {
+      document.getElementById("carrier-display-text").textContent = carrierText;
+      document.getElementById("carrier-number-input").value = carrierText;
+      document.getElementById("carrier-preview-text").textContent = carrierText;
+      document.getElementById("carrier-preview").classList.remove("hidden");
+    } else {
+      document.getElementById("carrier-display-text").textContent = "/ABC1234";
+      document.getElementById("carrier-number-input").value = "";
+      document.getElementById("carrier-preview").classList.add("hidden");
+    }
+  }
+
+  function updateUI() {
+    updateTotalAmount();
+    updateCategoryStats();
+    updateRecentRecords();
+  }
+
+  function updateTotalAmount() {
+    const total = allRecords.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+    document.getElementById("total-amount").textContent = total.toLocaleString();
+  }
+
+  function updateCategoryStats() {
+    const statsContainer = document.getElementById("category-stats");
+    const categoryTotals = {};
+    allRecords.forEach(r => {
+      if (!r.category) return;
+      categoryTotals[r.category] = (categoryTotals[r.category] || 0) + (Number(r.amount) || 0);
+    });
+
+    const sorted = Object.entries(categoryTotals).sort((a,b) => b[1]-a[1]).slice(0,5);
+    if (sorted.length === 0) {
+      statsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">尚無消費記錄</p>';
+      return;
+    }
+    const maxAmount = Math.max(...sorted.map(x => x[1]));
+
+    statsContainer.innerHTML = sorted.map(([cat, amt]) => {
+      const percentage = maxAmount ? (amt / maxAmount) * 100 : 0;
+      return `
+        <div class="bg-white rounded-xl p-4 shadow-sm">
+          <div class="flex justify-between mb-2">
+            <span class="font-semibold" style="color:#2d3748;">${cat}</span>
+            <span class="font-bold" style="color:#667eea;">${safeCurrency()}${amt.toLocaleString()}</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="h-2 rounded-full" style="width:${percentage}%; background:#667eea;"></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function updateRecentRecords() {
+    const container = document.getElementById("recent-records");
+    const recent = allRecords.slice(0,10);
+
+    if (recent.length === 0) {
+      container.innerHTML = '<p class="text-gray-500 text-center py-4">尚無消費記錄</p>';
+      return;
     }
 
-    function updateUI() {
-      updateTotalAmount();
-      updateCategoryStats();
-      updateRecentRecords();
-    }
+    container.innerHTML = recent.map(r => {
+      const d = new Date(r.timestamp);
+      const timeStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+      return `
+        <div class="bg-white rounded-xl p-4 shadow-sm flex justify-between items-center">
+          <div>
+            <div class="font-semibold text-lg mb-1" style="color:#2d3748;">${r.category || ""}</div>
+            <div class="text-sm text-gray-500">${r.payment_method || ""} · ${timeStr}</div>
+            ${r.note ? `<div class="text-sm text-gray-400 mt-1">${r.note}</div>` : ""}
+          </div>
+          <div class="text-xl font-bold" style="color:#667eea;">${safeCurrency()}${(Number(r.amount)||0).toLocaleString()}</div>
+        </div>
+      `;
+    }).join("");
+  }
 
-    function updateTotalAmount() {
-      const total = allRecords.reduce((sum, record) => sum + (Number(record.amount) || 0), 0);
-      document.getElementById("total-amount").textContent = total.toLocaleString();
-    }
+  function getCategoryEmoji(category) {
+    const map = { "早餐":"🍳","午餐":"🍱","晚餐":"🍽️","交通":"🚗","娛樂":"🎮","購物":"🛍️","其他":"📝" };
+    return map[category] || "💰";
+  }
 
-    function updateCategoryStats() {
-      const statsContainer = document.getElementById("category-stats");
-      const categoryTotals = {};
+  function renderCategoryGrid() {
+    const grid = document.getElementById("category-grid");
+    const allCats = [...defaultCategories, ...customCategories];
 
-      allRecords.forEach(record => {
-        if (!record.category) return;
-        categoryTotals[record.category] = (categoryTotals[record.category] || 0) + (Number(record.amount) || 0);
+    grid.innerHTML = allCats.map(cat => `
+      <button class="category-btn p-6 rounded-2xl bg-white shadow-sm text-center font-semibold transition-all hover:shadow-md" data-category="${cat}" style="color:#2d3748;">
+        ${getCategoryEmoji(cat)}<br><span class="text-sm">${cat}</span>
+      </button>
+    `).join("");
+
+    document.querySelectorAll(".category-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentFlow.category = btn.dataset.category || "";
+        document.getElementById("selected-category-display").textContent = `分類: ${currentFlow.category}`;
+        document.getElementById("selected-category-display2").textContent = `分類: ${currentFlow.category}`;
+        document.getElementById("final-category-display").textContent = currentFlow.category;
+        document.getElementById("external-payment-category").textContent = currentFlow.category;
+        document.getElementById("success-category").textContent = currentFlow.category;
+        showScreen("step2-screen");
       });
+    });
+  }
 
-      const sortedCategories = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  function initializeAnalysisFilters() {
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0);
 
-      if (sortedCategories.length === 0) {
-        statsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">尚無消費記錄</p>';
-        return;
-      }
+    const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 
-      const maxAmount = Math.max(...sortedCategories.map(([_, amount]) => amount));
-      const currency = defaultConfig.currency_symbol;
+    document.getElementById("filter-start-date").value = fmt(firstDay);
+    document.getElementById("filter-end-date").value = fmt(lastDay);
+    document.getElementById("filter-min-amount").value = "";
+    document.getElementById("filter-max-amount").value = "";
+    document.getElementById("filter-category").value = "all";
 
-      statsContainer.innerHTML = sortedCategories.map(([category, amount]) => {
-        const percentage = maxAmount ? (amount / maxAmount) * 100 : 0;
+    analysisFilters = { startDate: fmt(firstDay), endDate: fmt(lastDay), category:"all", minAmount:null, maxAmount:null };
+    updateCategoryFilter();
+    performAnalysis();
+  }
+
+  function updateCategoryFilter() {
+    const select = document.getElementById("filter-category");
+    const categories = new Set();
+    allRecords.forEach(r => r.category && categories.add(r.category));
+    select.innerHTML = '<option value="all">全部用途</option>';
+    Array.from(categories).sort().forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat; opt.textContent = cat;
+      select.appendChild(opt);
+    });
+  }
+
+  function getFilteredRecords() {
+    return allRecords.filter(r => {
+      const recordDate = new Date(r.timestamp).toISOString().split("T")[0];
+      if (analysisFilters.startDate && recordDate < analysisFilters.startDate) return false;
+      if (analysisFilters.endDate && recordDate > analysisFilters.endDate) return false;
+      if (analysisFilters.category !== "all" && r.category !== analysisFilters.category) return false;
+      if (analysisFilters.minAmount != null && (Number(r.amount)||0) < analysisFilters.minAmount) return false;
+      if (analysisFilters.maxAmount != null && (Number(r.amount)||0) > analysisFilters.maxAmount) return false;
+      return true;
+    });
+  }
+
+  function performAnalysis() {
+    const filtered = getFilteredRecords();
+    const total = filtered.reduce((s,r) => s + (Number(r.amount)||0), 0);
+    const count = filtered.length;
+    const avg = count ? Math.round(total / count) : 0;
+    const max = count ? Math.max(...filtered.map(r => Number(r.amount)||0)) : 0;
+
+    document.getElementById("analysis-total").textContent = total.toLocaleString();
+    document.getElementById("analysis-count").textContent = count;
+    document.getElementById("analysis-average").textContent = avg.toLocaleString();
+    document.getElementById("analysis-max").textContent = max.toLocaleString();
+
+    const categoryStats = {};
+    filtered.forEach(r => {
+      categoryStats[r.category] = (categoryStats[r.category] || 0) + (Number(r.amount)||0);
+    });
+    const sortedCats = Object.entries(categoryStats).sort((a,b) => b[1]-a[1]);
+    const catContainer = document.getElementById("category-distribution");
+
+    if (sortedCats.length === 0) {
+      catContainer.innerHTML = '<p class="text-gray-500 text-center py-2">無資料</p>';
+    } else {
+      const maxCatAmt = Math.max(...sortedCats.map(x => x[1]));
+      catContainer.innerHTML = sortedCats.map(([cat, amt]) => {
+        const width = maxCatAmt ? (amt / maxCatAmt) * 100 : 0;
+        const proportion = total ? ((amt / total) * 100).toFixed(1) : "0.0";
         return `
-          <div class="bg-white rounded-xl p-4 shadow-sm">
-            <div class="flex justify-between mb-2">
-              <span class="font-semibold" style="color: #2d3748;">${category}</span>
-              <span class="font-bold" style="color: #667eea;">${currency}${amount.toLocaleString()}</span>
+          <div>
+            <div class="flex justify-between mb-1 text-sm">
+              <span class="font-semibold" style="color:#2d3748;">${cat}</span>
+              <span class="text-gray-600">${safeCurrency()}${amt.toLocaleString()} (${proportion}%)</span>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2">
-              <div class="h-2 rounded-full" style="width: ${percentage}%; background: #667eea;"></div>
+              <div class="h-2 rounded-full" style="width:${width}%; background:#667eea;"></div>
             </div>
           </div>
         `;
       }).join("");
     }
 
-    function updateRecentRecords() {
-      const container = document.getElementById("recent-records");
-      const recentRecords = [...allRecords].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 10);
+    const paymentStats = {};
+    filtered.forEach(r => {
+      const m = r.payment_method || "未知";
+      if (!paymentStats[m]) paymentStats[m] = { count:0, amount:0 };
+      paymentStats[m].count++;
+      paymentStats[m].amount += (Number(r.amount)||0);
+    });
+    const sortedPay = Object.entries(paymentStats).sort((a,b) => b[1].amount - a[1].amount);
+    const payContainer = document.getElementById("payment-distribution");
 
-      if (recentRecords.length === 0) {
-        container.innerHTML = '<p class="text-gray-500 text-center py-4">尚無消費記錄</p>';
-        return;
-      }
-
-      const currency = defaultConfig.currency_symbol;
-
-      container.innerHTML = recentRecords.map(record => {
-        const date = new Date(record.timestamp);
-        const timeStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+    if (sortedPay.length === 0) {
+      payContainer.innerHTML = '<p class="text-gray-500 text-center py-2">無資料</p>';
+    } else {
+      payContainer.innerHTML = sortedPay.map(([method, st]) => {
+        const prop = total ? ((st.amount / total) * 100).toFixed(1) : "0.0";
         return `
-          <div class="bg-white rounded-xl p-4 shadow-sm flex justify-between items-center">
+          <div class="flex justify-between items-center py-2 border-b border-gray-100">
             <div>
-              <div class="font-semibold text-lg mb-1" style="color: #2d3748;">${record.category}</div>
-              <div class="text-sm text-gray-500">${record.payment_method} · ${timeStr}</div>
-              ${record.note ? `<div class="text-sm text-gray-400 mt-1">${record.note}</div>` : ""}
+              <p class="font-semibold" style="color:#2d3748;">${method}</p>
+              <p class="text-xs text-gray-500">${st.count} 筆交易</p>
             </div>
-            <div class="text-xl font-bold" style="color: #667eea;">${currency}${(Number(record.amount) || 0).toLocaleString()}</div>
+            <div class="text-right">
+              <p class="font-bold" style="color:#667eea;">${safeCurrency()}${st.amount.toLocaleString()}</p>
+              <p class="text-xs text-gray-500">${prop}%</p>
+            </div>
           </div>
         `;
       }).join("");
     }
 
-    function showScreen(screenId) {
-      const screens = [
-        "main-screen","analysis-screen","settings-screen",
-        "step1-screen","step2-screen","step3-screen","step4-screen",
-        "payment-redirect-screen","external-payment-screen","payment-success-screen"
-      ];
-
-      screens.forEach(id => {
-        const screen = document.getElementById(id);
-        if (id === screenId) {
-          screen.classList.remove("hidden");
-          screen.classList.add("flex","fade-in");
-        } else {
-          screen.classList.add("hidden");
-          screen.classList.remove("flex");
-        }
-      });
-    }
-
-    function getCategoryEmoji(category) {
-      const emojiMap = { "早餐":"🍳","午餐":"🍱","晚餐":"🍽️","交通":"🚗","娛樂":"🎮","購物":"🛍️","其他":"📝" };
-      return emojiMap[category] || "💰";
-    }
-
-    function renderCategoryGrid() {
-      const grid = document.getElementById("category-grid");
-      const allCategories = [...defaultCategories, ...customCategories];
-
-      grid.innerHTML = allCategories.map(category => `
-        <button class="category-btn p-6 rounded-2xl bg-white shadow-sm text-center font-semibold transition-all hover:shadow-md" data-category="${category}" style="color: #2d3748;">
-          ${getCategoryEmoji(category)}<br><span class="text-sm">${category}</span>
-        </button>
-      `).join("");
-
-      document.querySelectorAll(".category-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          currentFlow.category = btn.dataset.category;
-          document.getElementById("selected-category-display").textContent = `分類: ${currentFlow.category}`;
-          document.getElementById("selected-category-display2").textContent = `分類: ${currentFlow.category}`;
-          document.getElementById("final-category-display").textContent = currentFlow.category;
-          document.getElementById("external-payment-category").textContent = currentFlow.category;
-          document.getElementById("success-category").textContent = currentFlow.category;
-          showScreen("step2-screen");
-        });
-      });
-    }
-
-    function initializeAnalysisFilters() {
-      const now = new Date();
-      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-      const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
-      const formatDate = (date) => {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, "0");
-        const d = String(date.getDate()).padStart(2, "0");
-        return `${y}-${m}-${d}`;
-      };
-
-      document.getElementById("filter-start-date").value = formatDate(firstDay);
-      document.getElementById("filter-end-date").value = formatDate(lastDay);
-      document.getElementById("filter-min-amount").value = "";
-      document.getElementById("filter-max-amount").value = "";
-      document.getElementById("filter-category").value = "all";
-
-      analysisFilters = {
-        startDate: formatDate(firstDay),
-        endDate: formatDate(lastDay),
-        category: "all",
-        minAmount: null,
-        maxAmount: null
-      };
-
-      updateCategoryFilter();
-      performAnalysis();
-    }
-
-    function updateCategoryFilter() {
-      const select = document.getElementById("filter-category");
-      const categories = new Set();
-      allRecords.forEach(record => record.category && categories.add(record.category));
-
-      select.innerHTML = '<option value="all">全部用途</option>';
-      Array.from(categories).sort().forEach(category => {
-        const option = document.createElement("option");
-        option.value = category;
-        option.textContent = category;
-        select.appendChild(option);
-      });
-    }
-
-    function getFilteredRecords() {
-      return allRecords.filter(record => {
-        const recordDate = new Date(record.timestamp).toISOString().split("T")[0];
-
-        if (analysisFilters.startDate && recordDate < analysisFilters.startDate) return false;
-        if (analysisFilters.endDate && recordDate > analysisFilters.endDate) return false;
-        if (analysisFilters.category !== "all" && record.category !== analysisFilters.category) return false;
-        if (analysisFilters.minAmount != null && (Number(record.amount) || 0) < analysisFilters.minAmount) return false;
-        if (analysisFilters.maxAmount != null && (Number(record.amount) || 0) > analysisFilters.maxAmount) return false;
-
-        return true;
-      });
-    }
-
-    function performAnalysis() {
-      const filteredRecords = getFilteredRecords();
-
-      const total = filteredRecords.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
-      const count = filteredRecords.length;
-      const average = count > 0 ? Math.round(total / count) : 0;
-      const max = count > 0 ? Math.max(...filteredRecords.map(r => Number(r.amount) || 0)) : 0;
-
-      document.getElementById("analysis-total").textContent = total.toLocaleString();
-      document.getElementById("analysis-count").textContent = count;
-      document.getElementById("analysis-average").textContent = average.toLocaleString();
-      document.getElementById("analysis-max").textContent = max.toLocaleString();
-
-      const categoryStats = {};
-      filteredRecords.forEach(record => {
-        const c = record.category || "未分類";
-        categoryStats[c] = (categoryStats[c] || 0) + (Number(record.amount) || 0);
-      });
-
-      const sortedCategories = Object.entries(categoryStats).sort((a, b) => b[1] - a[1]);
-      const categoryContainer = document.getElementById("category-distribution");
-
-      if (sortedCategories.length === 0) {
-        categoryContainer.innerHTML = '<p class="text-gray-500 text-center py-2">無資料</p>';
-      } else {
-        const maxCategoryAmount = Math.max(...sortedCategories.map(([_, amount]) => amount));
-        const currency = defaultConfig.currency_symbol;
-
-        categoryContainer.innerHTML = sortedCategories.map(([category, amount]) => {
-          const percentage = maxCategoryAmount ? (amount / maxCategoryAmount) * 100 : 0;
-          const proportion = total ? ((amount / total) * 100).toFixed(1) : "0.0";
-          return `
-            <div>
-              <div class="flex justify-between mb-1 text-sm">
-                <span class="font-semibold" style="color: #2d3748;">${category}</span>
-                <span class="text-gray-600">${currency}${amount.toLocaleString()} (${proportion}%)</span>
+    const recContainer = document.getElementById("analysis-records");
+    if (filtered.length === 0) {
+      recContainer.innerHTML = '<p class="text-gray-500 text-center py-4">無符合條件的記錄</p>';
+    } else {
+      recContainer.innerHTML = filtered.slice(0,20).map(r => {
+        const d = new Date(r.timestamp);
+        const dateStr = `${d.getMonth()+1}/${d.getDate()}`;
+        const timeStr = `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+        return `
+          <div class="flex justify-between items-center py-3 border-b border-gray-100">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-semibold" style="color:#2d3748;">${r.category || ""}</span>
+                <span class="text-xs px-2 py-1 rounded" style="background:#f0f0f0; color:#666;">${r.payment_method || ""}</span>
               </div>
-              <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="h-2 rounded-full" style="width: ${percentage}%; background: #667eea;"></div>
-              </div>
+              <p class="text-xs text-gray-500">${dateStr} ${timeStr}</p>
+              ${r.note ? `<p class="text-xs text-gray-400 mt-1">${r.note}</p>` : ""}
             </div>
-          `;
-        }).join("");
+            <div class="text-lg font-bold" style="color:#667eea;">${safeCurrency()}${(Number(r.amount)||0).toLocaleString()}</div>
+          </div>
+        `;
+      }).join("");
+      if (filtered.length > 20) recContainer.innerHTML += '<p class="text-gray-500 text-center py-3 text-sm">僅顯示前 20 筆記錄</p>';
+    }
+  }
+
+  function parseReturnAndAutoWrite() {
+    const params = new URLSearchParams(location.search);
+    const paid = params.get("paid");
+    if (paid !== "1") return;
+
+    const amount = Number(params.get("amount") || 0);
+    const method = (params.get("method") || "").trim();
+    const cat = (params.get("cat") || "").trim();
+    const note = (params.get("note") || "").trim();
+
+    if (!amount || amount <= 0 || !method || !cat) {
+      showErrorMessage("回寫參數不足（需 paid=1&amount&method&cat）");
+      return;
+    }
+
+    const record = {
+      id: Date.now().toString(),
+      category: cat,
+      amount: amount,
+      payment_method: method,
+      carrier_used: false,
+      timestamp: new Date().toISOString(),
+      note: note || `付款回寫：${method}`,
+      carrier_number: "",
+      is_settings: false
+    };
+
+    dataSdkSafe.create(record).then(() => {
+      showScreen("main-screen");
+      showSuccessMessage("✓ 已回寫付款金額並建立記錄");
+      history.replaceState({}, document.title, location.pathname);
+    });
+  }
+
+  function openDeepLinkWithHint(url) {
+    if (!url) return;
+    const start = Date.now();
+    window.location.href = url;
+    setTimeout(() => {
+      const elapsed = Date.now() - start;
+      if (elapsed < 1200) {
+        showErrorMessage("未跳轉成功：可能未安裝該支付 App 或被 iOS 阻擋");
       }
+    }, 900);
+  }
 
-      const paymentStats = {};
-      filteredRecords.forEach(record => {
-        const m = record.payment_method || "未知";
-        if (!paymentStats[m]) paymentStats[m] = { count: 0, amount: 0 };
-        paymentStats[m].count++;
-        paymentStats[m].amount += (Number(record.amount) || 0);
-      });
-
-      const sortedPayments = Object.entries(paymentStats).sort((a, b) => b[1].amount - a[1].amount);
-      const paymentContainer = document.getElementById("payment-distribution");
-
-      if (sortedPayments.length === 0) {
-        paymentContainer.innerHTML = '<p class="text-gray-500 text-center py-2">無資料</p>';
-      } else {
-        const currency = defaultConfig.currency_symbol;
-        paymentContainer.innerHTML = sortedPayments.map(([method, stats]) => {
-          const proportion = total ? ((stats.amount / total) * 100).toFixed(1) : "0.0";
-          return `
-            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-              <div>
-                <p class="font-semibold" style="color: #2d3748;">${method}</p>
-                <p class="text-xs text-gray-500">${stats.count} 筆交易</p>
-              </div>
-              <div class="text-right">
-                <p class="font-bold" style="color: #667eea;">${currency}${stats.amount.toLocaleString()}</p>
-                <p class="text-xs text-gray-500">${proportion}%</p>
-              </div>
-            </div>
-          `;
-        }).join("");
-      }
-
-      const recordsContainer = document.getElementById("analysis-records");
-      const currency = defaultConfig.currency_symbol;
-
-      if (filteredRecords.length === 0) {
-        recordsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">無符合條件的記錄</p>';
-      } else {
-        recordsContainer.innerHTML = filteredRecords.slice(0, 20).map(record => {
-          const date = new Date(record.timestamp);
-          const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
-          const timeStr = `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
-          return `
-            <div class="flex justify-between items-center py-3 border-b border-gray-100">
-              <div class="flex-1">
-                <div class="flex items-center gap-2 mb-1">
-                  <span class="font-semibold" style="color: #2d3748;">${record.category}</span>
-                  <span class="text-xs px-2 py-1 rounded" style="background: #f0f0f0; color: #666;">${record.payment_method}</span>
-                </div>
-                <p class="text-xs text-gray-500">${dateStr} ${timeStr}</p>
-                ${record.note ? `<p class="text-xs text-gray-400 mt-1">${record.note}</p>` : ""}
-              </div>
-              <div class="text-lg font-bold" style="color: #667eea;">${currency}${(Number(record.amount) || 0).toLocaleString()}</div>
-            </div>
-          `;
-        }).join("");
-
-        if (filteredRecords.length > 20) {
-          recordsContainer.innerHTML += '<p class="text-gray-500 text-center py-3 text-sm">僅顯示前 20 筆記錄</p>';
-        }
-      }
-    }
-
-    function showSuccessMessage(message) {
-      const div = document.createElement("div");
-      div.textContent = message;
-      div.className = "fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50";
-      document.body.appendChild(div);
-      setTimeout(() => div.remove(), 2000);
-    }
-
-    function showErrorMessage(message) {
-      const div = document.createElement("div");
-      div.textContent = message;
-      div.className = "fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg z-50";
-      document.body.appendChild(div);
-      setTimeout(() => div.remove(), 2000);
-    }
-
-    function isIOS() {
-      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
-    }
-
-    function openDeepLink(url) {
-      try { window.location.href = url; } catch {}
-    }
-
-    const iosDeepLinks = {
+  function getIosDeepLinks() {
+    return {
       "LINE Pay": "line://pay/generateQR",
       "Taiwan Pay": "twmpshortcut://?type=payment",
       "全支付": "com.pxpay.plus://zjdja",
       "街口支付": "jkos://showQRCode",
       "悠遊付": "tw.com.easycard.easycardwallet://paymentCode"
     };
+  }
 
-    let lastDeepLink = "";
+  function goBackWithAutoWrite(amount, method, category, note) {
+    const url = new URL(location.href);
+    url.searchParams.set("paid", "1");
+    url.searchParams.set("amount", String(amount));
+    url.searchParams.set("method", method);
+    url.searchParams.set("cat", category);
+    if (note) url.searchParams.set("note", note);
+    window.location.href = url.pathname + "?" + url.searchParams.toString();
+  }
 
-    document.getElementById("apply-filter-btn").addEventListener("click", () => {
-      analysisFilters = {
-        startDate: document.getElementById("filter-start-date").value || null,
-        endDate: document.getElementById("filter-end-date").value || null,
-        category: document.getElementById("filter-category").value,
-        minAmount: parseFloat(document.getElementById("filter-min-amount").value) || null,
-        maxAmount: parseFloat(document.getElementById("filter-max-amount").value) || null
+  document.getElementById("apply-filter-btn").addEventListener("click", () => {
+    analysisFilters = {
+      startDate: document.getElementById("filter-start-date").value || null,
+      endDate: document.getElementById("filter-end-date").value || null,
+      category: document.getElementById("filter-category").value,
+      minAmount: (() => {
+        const v = document.getElementById("filter-min-amount").value;
+        return v ? Number(v) : null;
+      })(),
+      maxAmount: (() => {
+        const v = document.getElementById("filter-max-amount").value;
+        return v ? Number(v) : null;
+      })()
+    };
+    performAnalysis();
+    showSuccessMessage("✓ 篩選已套用");
+  });
+
+  document.getElementById("reset-filter-btn").addEventListener("click", () => {
+    initializeAnalysisFilters();
+    showSuccessMessage("✓ 已重置為當月資料");
+  });
+
+  document.getElementById("settings-btn").addEventListener("click", () => showScreen("settings-screen"));
+  document.getElementById("analysis-btn").addEventListener("click", () => { initializeAnalysisFilters(); showScreen("analysis-screen"); });
+
+  document.getElementById("back-from-analysis").addEventListener("click", () => showScreen("main-screen"));
+  document.getElementById("back-from-settings").addEventListener("click", () => showScreen("main-screen"));
+
+  document.getElementById("carrier-number-input").addEventListener("input", (e) => {
+    const v = e.target.value || "";
+    if (v.length > 0) {
+      document.getElementById("carrier-preview").classList.remove("hidden");
+      document.getElementById("carrier-preview-text").textContent = v;
+    } else {
+      document.getElementById("carrier-preview").classList.add("hidden");
+    }
+  });
+
+  document.getElementById("save-carrier-btn").addEventListener("click", async () => {
+    const carrierNumber = (document.getElementById("carrier-number-input").value || "").trim();
+    if (!carrierNumber) { showErrorMessage("請輸入載具號碼"); return; }
+    if (!carrierNumber.startsWith("/")) { showErrorMessage("載具號碼必須以 / 開頭"); return; }
+
+    const saveBtn = document.getElementById("save-carrier-btn");
+    const btnText = document.getElementById("save-carrier-text");
+    saveBtn.disabled = true; btnText.textContent = "儲存中...";
+
+    if (carrierSettings) {
+      const updated = { ...carrierSettings, carrier_number: carrierNumber, is_settings: true };
+      const res = await dataSdkSafe.update(updated);
+      if (res?.isOk) showSuccessMessage("✓ 載具設定已更新"); else showErrorMessage("更新失敗，請重試");
+    } else {
+      const newSettings = {
+        id: "carrier-settings",
+        carrier_number: carrierNumber,
+        is_settings: true,
+        category: "",
+        amount: 0,
+        payment_method: "",
+        carrier_used: false,
+        timestamp: new Date().toISOString(),
+        note: ""
       };
-      performAnalysis();
-      showSuccessMessage("✓ 篩選已套用");
-    });
+      const res = await dataSdkSafe.create(newSettings);
+      if (res?.isOk) showSuccessMessage("✓ 載具設定已儲存"); else showErrorMessage("儲存失敗，請重試");
+    }
 
-    document.getElementById("reset-filter-btn").addEventListener("click", () => {
-      initializeAnalysisFilters();
-      showSuccessMessage("✓ 已重置為當月資料");
-    });
+    saveBtn.disabled = false; btnText.textContent = "儲存載具設定";
+  });
 
-    document.getElementById("settings-btn").addEventListener("click", () => showScreen("settings-screen"));
-    document.getElementById("analysis-btn").addEventListener("click", () => { initializeAnalysisFilters(); showScreen("analysis-screen"); });
-    document.getElementById("back-from-analysis").addEventListener("click", () => showScreen("main-screen"));
-    document.getElementById("back-from-settings").addEventListener("click", () => showScreen("main-screen"));
+  document.getElementById("quick-expense-btn").addEventListener("click", () => {
+    currentFlow = { category:"", paymentMethod:"", paymentColor:"", paymentEmoji:"", carrierUsed:false, pendingAmount:0 };
+    renderCategoryGrid();
+    showScreen("step1-screen");
+  });
 
-    document.getElementById("carrier-number-input").addEventListener("input", (e) => {
-      const value = e.target.value;
-      if (value.length > 0) {
-        document.getElementById("carrier-preview").classList.remove("hidden");
-        document.getElementById("carrier-preview-text").textContent = value;
-      } else {
-        document.getElementById("carrier-preview").classList.add("hidden");
-      }
-    });
+  document.getElementById("back-from-step1").addEventListener("click", () => showScreen("main-screen"));
+  document.getElementById("back-from-step2").addEventListener("click", () => showScreen("step1-screen"));
+  document.getElementById("back-from-step3").addEventListener("click", () => showScreen("step2-screen"));
+  document.getElementById("back-from-step4").addEventListener("click", () => showScreen("step3-screen"));
 
-    document.getElementById("save-carrier-btn").addEventListener("click", async () => {
-      const carrierNumber = document.getElementById("carrier-number-input").value.trim();
+  document.getElementById("add-category-btn").addEventListener("click", () => {
+    document.getElementById("add-category-form").classList.remove("hidden");
+    document.getElementById("new-category-input").focus();
+  });
 
-      if (!carrierNumber) return showErrorMessage("請輸入載具號碼");
-      if (!carrierNumber.startsWith("/")) return showErrorMessage("載具號碼必須以 / 開頭");
+  document.getElementById("cancel-category-btn").addEventListener("click", () => {
+    document.getElementById("add-category-form").classList.add("hidden");
+    document.getElementById("new-category-input").value = "";
+  });
 
-      const btn = document.getElementById("save-carrier-btn");
-      const text = document.getElementById("save-carrier-text");
-      btn.disabled = true;
-      text.textContent = "儲存中...";
-
-      carrierSettings = { carrier_number: carrierNumber };
-      saveToLocal();
-      updateCarrierDisplay();
-
-      btn.disabled = false;
-      text.textContent = "儲存載具設定";
-      showSuccessMessage("✓ 載具設定已儲存");
-    });
-
-    document.getElementById("quick-expense-btn").addEventListener("click", () => {
-      currentFlow = { category: "", paymentMethod: "", paymentColor: "", paymentEmoji: "", carrierUsed: false, pendingAmount: 0 };
+  document.getElementById("save-category-btn").addEventListener("click", () => {
+    const newCat = (document.getElementById("new-category-input").value || "").trim();
+    if (newCat && !customCategories.includes(newCat) && !defaultCategories.includes(newCat)) {
+      customCategories.push(newCat);
       renderCategoryGrid();
-      showScreen("step1-screen");
-    });
+    }
+    document.getElementById("add-category-form").classList.add("hidden");
+    document.getElementById("new-category-input").value = "";
+  });
 
-    document.getElementById("back-from-step1").addEventListener("click", () => showScreen("main-screen"));
-    document.getElementById("back-from-step2").addEventListener("click", () => showScreen("step1-screen"));
-    document.getElementById("back-from-step3").addEventListener("click", () => showScreen("step2-screen"));
-    document.getElementById("back-from-step4").addEventListener("click", () => showScreen("step3-screen"));
+  document.getElementById("skip-carrier-btn").addEventListener("click", () => { currentFlow.carrierUsed = false; showScreen("step3-screen"); });
+  document.getElementById("continue-to-payment-btn").addEventListener("click", () => { currentFlow.carrierUsed = true; showScreen("step3-screen"); });
 
-    document.getElementById("add-category-btn").addEventListener("click", () => {
-      document.getElementById("add-category-form").classList.remove("hidden");
-      document.getElementById("new-category-input").focus();
-    });
+  let pendingDeepLink = "";
 
-    document.getElementById("cancel-category-btn").addEventListener("click", () => {
-      document.getElementById("add-category-form").classList.add("hidden");
-      document.getElementById("new-category-input").value = "";
-    });
+  document.querySelectorAll(".payment-method-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentFlow.paymentMethod = btn.dataset.method || "";
+      currentFlow.paymentColor = btn.dataset.color || "#667eea";
+      currentFlow.paymentEmoji = btn.dataset.emoji || "💳";
+      document.getElementById("final-payment-display").textContent = currentFlow.paymentMethod;
 
-    document.getElementById("save-category-btn").addEventListener("click", () => {
-      const newCategory = document.getElementById("new-category-input").value.trim();
-      if (newCategory && !customCategories.includes(newCategory) && !defaultCategories.includes(newCategory)) {
-        customCategories.push(newCategory);
-        renderCategoryGrid();
+      if (currentFlow.paymentMethod === "現金") {
+        showScreen("step4-screen");
+        return;
       }
-      document.getElementById("add-category-form").classList.add("hidden");
-      document.getElementById("new-category-input").value = "";
-    });
 
-    document.getElementById("skip-carrier-btn").addEventListener("click", () => { currentFlow.carrierUsed = false; showScreen("step3-screen"); });
-    document.getElementById("continue-to-payment-btn").addEventListener("click", () => { currentFlow.carrierUsed = true; showScreen("step3-screen"); });
+      const iosDeepLinks = getIosDeepLinks();
+      pendingDeepLink = iosDeepLinks[currentFlow.paymentMethod] || "";
 
-    document.getElementById("open-app-again-btn").addEventListener("click", () => {
-      if (!lastDeepLink) return;
-      openDeepLink(lastDeepLink);
-    });
+      document.getElementById("redirect-payment-name").textContent = currentFlow.paymentMethod;
+      document.getElementById("redirect-payment-icon").textContent = currentFlow.paymentEmoji;
+      document.getElementById("redirect-payment-icon").style.background = currentFlow.paymentColor;
+      document.getElementById("pulse-ring").style.background = currentFlow.paymentColor + "40";
+      document.getElementById("deep-link-url").textContent = pendingDeepLink || "（無對應 Deep Link）";
 
-    document.querySelectorAll(".payment-method-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        currentFlow.paymentMethod = btn.dataset.method;
-        currentFlow.paymentColor = btn.dataset.color;
-        currentFlow.paymentEmoji = btn.dataset.emoji;
-        document.getElementById("final-payment-display").textContent = currentFlow.paymentMethod;
-
-        if (currentFlow.paymentMethod === "現金") {
-          showScreen("step4-screen");
-          return;
-        }
-
-        const deepLink = iosDeepLinks[currentFlow.paymentMethod] || "";
-        lastDeepLink = deepLink;
-
-        document.getElementById("redirect-payment-name").textContent = currentFlow.paymentMethod;
-        document.getElementById("redirect-payment-icon").textContent = currentFlow.paymentEmoji;
-        document.getElementById("redirect-payment-icon").style.background = currentFlow.paymentColor;
-        document.getElementById("pulse-ring").style.background = currentFlow.paymentColor + "40";
-        document.getElementById("deep-link-url").textContent = deepLink || "未設定 deep link";
-
-        showScreen("payment-redirect-screen");
-
-        if (isIOS() && deepLink) {
-          setTimeout(() => openDeepLink(deepLink), 50);
-        }
-
-        setTimeout(() => {
-          if (document.hidden) return;
-
-          document.getElementById("external-app-title").textContent = currentFlow.paymentMethod;
-          document.getElementById("external-payment-header").style.background = currentFlow.paymentColor;
-          document.getElementById("external-icon").textContent = currentFlow.paymentEmoji;
-          document.getElementById("external-icon").style.background = currentFlow.paymentColor + "20";
-          document.getElementById("confirm-external-payment-btn").style.background = currentFlow.paymentColor;
-          document.getElementById("external-amount-input").value = "";
-          showScreen("external-payment-screen");
-        }, 1200);
-      });
-    });
-
-    document.getElementById("external-amount-input").addEventListener("input", (e) => {
-      const amount = parseFloat(e.target.value) || 0;
-      const remaining = 8520 - amount;
-      document.getElementById("remaining-balance").textContent = `NT$ ${remaining.toLocaleString()}`;
-    });
-
-    document.getElementById("cancel-external-payment-btn").addEventListener("click", () => showScreen("step3-screen"));
-
-    document.getElementById("confirm-external-payment-btn").addEventListener("click", async () => {
-      const amount = parseFloat(document.getElementById("external-amount-input").value);
-      if (!amount || amount <= 0) return showErrorMessage("請輸入有效金額");
-
-      currentFlow.pendingAmount = amount;
-
-      const confirmBtn = document.getElementById("confirm-external-payment-btn");
-      const btnText = document.getElementById("confirm-btn-text");
-      confirmBtn.disabled = true;
-      btnText.textContent = "處理中...";
+      showScreen("payment-redirect-screen");
 
       setTimeout(() => {
-        document.getElementById("success-amount").textContent = amount.toLocaleString();
-        showScreen("payment-success-screen");
-
-        setTimeout(() => {
-          const record = {
-            id: Date.now().toString(),
-            category: currentFlow.category,
-            amount: currentFlow.pendingAmount,
-            payment_method: currentFlow.paymentMethod,
-            carrier_used: currentFlow.carrierUsed,
-            timestamp: new Date().toISOString(),
-            note: `透過 ${currentFlow.paymentMethod} 付款`
-          };
-
-          allRecords.push(record);
-          saveToLocal();
-          updateUI();
-          updateCategoryFilter();
-
-          showScreen("main-screen");
-          showSuccessMessage("✓ 付款成功！記錄已自動儲存");
-
-          confirmBtn.disabled = false;
-          btnText.textContent = "確認付款";
-        }, 1200);
-      }, 800);
+        if (pendingDeepLink) openDeepLinkWithHint(pendingDeepLink);
+      }, 600);
     });
+  });
 
-    document.getElementById("save-expense-btn").addEventListener("click", async () => {
-      const amount = parseFloat(document.getElementById("amount-input").value);
-      const note = document.getElementById("note-input").value.trim();
+  document.getElementById("open-deeplink-now").addEventListener("click", () => {
+    if (!pendingDeepLink) { showErrorMessage("此支付方式目前沒有設定 Deep Link"); return; }
+    openDeepLinkWithHint(pendingDeepLink);
+  });
 
-      if (!amount || amount <= 0) return showErrorMessage("請輸入有效金額");
+  document.getElementById("back-to-app-btn").addEventListener("click", () => {
+    showScreen("external-payment-screen");
+    document.getElementById("external-app-title").textContent = currentFlow.paymentMethod;
+    document.getElementById("external-payment-header").style.background = currentFlow.paymentColor;
+    document.getElementById("external-icon").textContent = currentFlow.paymentEmoji;
+    document.getElementById("external-icon").style.background = currentFlow.paymentColor + "20";
+    document.getElementById("confirm-external-payment-btn").style.background = currentFlow.paymentColor;
+    document.getElementById("external-amount-input").value = "";
+    document.getElementById("remaining-balance").textContent = "NT$ 8,520";
+  });
 
-      const saveBtn = document.getElementById("save-expense-btn");
-      const btnText = document.getElementById("save-btn-text");
-      saveBtn.disabled = true;
-      btnText.textContent = "儲存中...";
+  document.getElementById("external-amount-input").addEventListener("input", (e) => {
+    const amt = Number(e.target.value || 0);
+    const remaining = 8520 - amt;
+    document.getElementById("remaining-balance").textContent = `NT$ ${remaining.toLocaleString()}`;
+  });
 
-      const record = {
-        id: Date.now().toString(),
-        category: currentFlow.category,
-        amount: amount,
-        payment_method: currentFlow.paymentMethod,
-        carrier_used: currentFlow.carrierUsed,
-        timestamp: new Date().toISOString(),
-        note: note
-      };
+  document.getElementById("cancel-external-payment-btn").addEventListener("click", () => showScreen("step3-screen"));
 
-      allRecords.push(record);
-      saveToLocal();
-      updateUI();
-      updateCategoryFilter();
+  document.getElementById("confirm-external-payment-btn").addEventListener("click", () => {
+    const amount = Number(document.getElementById("external-amount-input").value || 0);
+    if (!amount || amount <= 0) { showErrorMessage("請輸入有效金額"); return; }
 
+    currentFlow.pendingAmount = amount;
+    const confirmBtn = document.getElementById("confirm-external-payment-btn");
+    const btnText = document.getElementById("confirm-btn-text");
+    confirmBtn.disabled = true; btnText.textContent = "處理中...";
+
+    setTimeout(() => {
+      document.getElementById("success-amount").textContent = amount.toLocaleString();
+      document.getElementById("success-category").textContent = currentFlow.category || "";
+      showScreen("payment-success-screen");
+
+      setTimeout(() => {
+        goBackWithAutoWrite(amount, currentFlow.paymentMethod, currentFlow.category, `透過 ${currentFlow.paymentMethod} 付款（回寫）`);
+        confirmBtn.disabled = false; btnText.textContent = "確認付款";
+      }, 1400);
+    }, 900);
+  });
+
+  document.getElementById("save-expense-btn").addEventListener("click", async () => {
+    const amount = Number(document.getElementById("amount-input").value || 0);
+    const note = (document.getElementById("note-input").value || "").trim();
+
+    if (!amount || amount <= 0) { showErrorMessage("請輸入有效金額"); return; }
+
+    const saveBtn = document.getElementById("save-expense-btn");
+    const btnText = document.getElementById("save-btn-text");
+    saveBtn.disabled = true; btnText.textContent = "儲存中...";
+
+    const record = {
+      id: Date.now().toString(),
+      category: currentFlow.category,
+      amount: amount,
+      payment_method: currentFlow.paymentMethod,
+      carrier_used: currentFlow.carrierUsed,
+      timestamp: new Date().toISOString(),
+      note: note,
+      carrier_number: "",
+      is_settings: false
+    };
+
+    const res = await dataSdkSafe.create(record);
+    if (res?.isOk) {
       document.getElementById("amount-input").value = "";
       document.getElementById("note-input").value = "";
-
       showScreen("main-screen");
       showSuccessMessage("✓ 記錄已儲存");
+    } else {
+      showErrorMessage("儲存失敗，請重試");
+    }
 
-      saveBtn.disabled = false;
-      btnText.textContent = "儲存記錄";
-    });
+    saveBtn.disabled = false; btnText.textContent = "儲存記錄";
+  });
 
-    function init() {
-      loadFromLocal();
-      updateUI();
-      updateCarrierDisplay();
-      updateCategoryFilter();
-      renderCategoryGrid();
+  async function init() {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    }
+
+    if (window.elementSdk?.init) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: () => ({ recolorables: [], borderables: [], fontEditable: undefined, fontSizeable: undefined }),
+        mapToEditPanelValues: (config) => new Map([["app_title", config.app_title || defaultConfig.app_title],["currency_symbol", config.currency_symbol || defaultConfig.currency_symbol]])
+      });
+    } else {
       onConfigChange(defaultConfig);
     }
 
-    init();
-  </script>
+    await dataSdkSafe.init({ onDataChanged(){} });
+    updateUI();
+    updateCarrierDisplay();
+    parseReturnAndAutoWrite();
+  }
+
+  init();
+</script>
 </body>
 </html>
