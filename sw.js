@@ -3,14 +3,14 @@ const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
   "https://cdn.tailwindcss.com"
 ];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)).catch(() => {})
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(CORE_ASSETS))
+      .catch(() => {})
   );
   self.skipWaiting();
 });
@@ -18,27 +18,32 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : null)))
+      Promise.all(
+        keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : null))
+      )
     )
   );
   self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
-  const req = event.request;
-  if (req.method !== "GET") return;
+  if (event.request.method !== "GET") return;
 
   event.respondWith(
-    caches.match(req).then((cached) => {
+    caches.match(event.request).then((cached) => {
       if (cached) return cached;
 
-      return fetch(req)
+      return fetch(event.request)
         .then((res) => {
-          const url = new URL(req.url);
-          // 只快取同源與 tailwind，避免把支付 deep link 等奇怪的也快取
-          if (url.origin === location.origin || req.url.includes("cdn.tailwindcss.com")) {
+          const url = new URL(event.request.url);
+          if (
+            url.origin === location.origin ||
+            event.request.url.includes("cdn.tailwindcss.com")
+          ) {
             const copy = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy)).catch(() => {});
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, copy);
+            });
           }
           return res;
         })
