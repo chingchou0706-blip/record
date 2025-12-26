@@ -7,6 +7,13 @@
   <script src="/_sdk/data_sdk.js"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    });
+  }
+  </script>
   <style>
     body { box-sizing: border-box; }
     .fade-in { animation: fadeIn 0.25s ease-in; }
@@ -16,6 +23,7 @@
     .modal-backdrop { background: rgba(0,0,0,0.45); }
   </style>
   <style>@view-transition { navigation: auto; }</style>
+  <link rel="manifest" href="./manifest.webmanifest">
 </head>
 
 <body class="h-full">
