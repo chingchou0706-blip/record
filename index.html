@@ -1,38 +1,31 @@
 <!doctype html>
 <html lang="zh-TW" class="h-full">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>智慧記帳APP - Deep Link版</title>
   <script src="/_sdk/data_sdk.js"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body{box-sizing:border-box}
-    .fade-in{animation:fadeIn .3s ease-in}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    .slide-up{animation:slideUp .25s ease-out}
-    @keyframes slideUp{from{transform:translateY(12px);opacity:.5}to{transform:translateY(0);opacity:1}}
-    .pulse-ring{animation:pulseRing 1.5s ease-out infinite}
-    @keyframes pulseRing{0%{transform:scale(.95);opacity:1}100%{transform:scale(1.3);opacity:0}}
-    .modal-backdrop{background:rgba(0,0,0,.45)}
-    .sheet{border-top-left-radius:24px;border-top-right-radius:24px}
-    .swipe-row{position:relative;overflow:hidden;border-radius:12px}
-    .swipe-actions{position:absolute;top:0;right:0;height:100%;display:flex;align-items:center;gap:8px;padding-right:12px}
-    .swipe-content{position:relative;z-index:2;transform:translateX(0);transition:transform .18s ease}
-    .swipe-revealed .swipe-content{transform:translateX(-92px)}
-    .tap-highlight{-webkit-tap-highlight-color:transparent}
+    body { box-sizing: border-box; }
+    .fade-in { animation: fadeIn 0.25s ease-in; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .pulse-ring { animation: pulseRing 1.5s ease-out infinite; }
+    @keyframes pulseRing { 0%{transform:scale(0.95);opacity:1} 100%{transform:scale(1.3);opacity:0} }
+    .modal-backdrop { background: rgba(0,0,0,0.45); }
   </style>
-  <style>@view-transition{navigation:auto}</style>
+  <style>@view-transition { navigation: auto; }</style>
 </head>
 
 <body class="h-full">
-  <div id="app" class="h-full w-full overflow-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);">
+  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+
     <div id="main-screen" class="h-full flex flex-col">
       <header class="px-6 pt-8 pb-6">
         <div class="flex items-center justify-between mb-2">
           <h1 id="app-title" class="text-white text-3xl font-bold">智慧記帳</h1>
-          <button id="settings-btn" class="tap-highlight text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-white hover:bg-opacity-20 transition-all">⚙️</button>
+          <button id="settings-btn" class="text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-white hover:bg-opacity-20 transition-all">⚙️</button>
         </div>
         <div class="flex items-baseline gap-2">
           <span id="currency-symbol" class="text-white text-lg opacity-90">NT$</span>
@@ -42,50 +35,48 @@
       </header>
 
       <div class="px-6 mb-6 space-y-3">
-        <button id="quick-expense-btn" class="tap-highlight w-full py-4 rounded-2xl text-white text-lg font-semibold shadow-lg" style="background:rgba(255,255,255,.25);backdrop-filter:blur(10px);">
-          <span class="text-2xl mr-2">➕</span>快速記一筆
+        <button id="quick-expense-btn" class="w-full py-4 rounded-2xl text-white text-lg font-semibold shadow-lg" style="background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px);">
+          <span class="text-2xl mr-2">➕</span> 快速記一筆
         </button>
-        <button id="analysis-btn" class="tap-highlight w-full py-4 rounded-2xl text-white text-lg font-semibold shadow-lg" style="background:rgba(255,255,255,.2);backdrop-filter:blur(10px);">
-          <span class="text-2xl mr-2">📊</span>消費分析
+        <button id="analysis-btn" class="w-full py-4 rounded-2xl text-white text-lg font-semibold shadow-lg" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);">
+          <span class="text-2xl mr-2">📊</span> 消費分析
         </button>
       </div>
 
-      <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background:#f8f9fa;">
+      <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background: #f8f9fa;">
         <section class="mb-6">
-          <h2 class="text-lg font-bold mb-3" style="color:#2d3748;">本月分類支出</h2>
+          <h2 class="text-lg font-bold mb-3" style="color: #2d3748;">本月分類支出</h2>
           <div id="category-stats" class="space-y-2"></div>
         </section>
-
         <section>
-          <h2 class="text-lg font-bold mb-3" style="color:#2d3748;">最近記錄</h2>
+          <h2 class="text-lg font-bold mb-3" style="color: #2d3748;">最近記錄</h2>
           <div id="recent-records" class="space-y-2"></div>
-          <p class="text-xs text-gray-400 mt-3">提示：可左滑快速刪除；或點 ⋯ 編輯/刪除</p>
         </section>
       </div>
     </div>
 
     <div id="analysis-screen" class="h-full flex-col hidden">
       <header class="px-6 pt-8 pb-6">
-        <button id="back-from-analysis" class="tap-highlight text-white text-2xl mb-4">←</button>
+        <button id="back-from-analysis" class="text-white text-2xl mb-4">←</button>
         <h1 class="text-white text-2xl font-bold">消費分析</h1>
         <p class="text-white text-sm opacity-75 mt-1">檢視您的消費習慣與統計</p>
       </header>
 
-      <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background:#f8f9fa;">
+      <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background: #f8f9fa;">
         <div class="bg-white rounded-2xl p-5 shadow-sm mb-4">
-          <h3 class="font-bold text-lg mb-4" style="color:#2d3748;">📅 篩選條件</h3>
+          <h3 class="font-bold text-lg mb-4" style="color: #2d3748;">📅 篩選條件</h3>
           <div class="space-y-4">
             <div>
               <label class="block text-sm font-semibold mb-2 text-gray-700">時間區間</label>
               <div class="grid grid-cols-2 gap-2">
-                <input type="date" id="filter-start-date" class="px-3 py-2 rounded-lg border-2 text-sm" style="border-color:#e2e8f0;">
-                <input type="date" id="filter-end-date" class="px-3 py-2 rounded-lg border-2 text-sm" style="border-color:#e2e8f0;">
+                <input type="date" id="filter-start-date" class="px-3 py-2 rounded-lg border-2 text-sm" style="border-color: #e2e8f0;">
+                <input type="date" id="filter-end-date" class="px-3 py-2 rounded-lg border-2 text-sm" style="border-color: #e2e8f0;">
               </div>
             </div>
 
             <div>
               <label class="block text-sm font-semibold mb-2 text-gray-700">消費用途</label>
-              <select id="filter-category" class="w-full px-3 py-2 rounded-lg border-2 text-sm" style="border-color:#e2e8f0;">
+              <select id="filter-category" class="w-full px-3 py-2 rounded-lg border-2 text-sm" style="border-color: #e2e8f0;">
                 <option value="all">全部用途</option>
               </select>
             </div>
@@ -93,14 +84,14 @@
             <div>
               <label class="block text-sm font-semibold mb-2 text-gray-700">金額範圍</label>
               <div class="grid grid-cols-2 gap-2">
-                <input type="number" id="filter-min-amount" placeholder="最低金額" class="px-3 py-2 rounded-lg border-2 text-sm" style="border-color:#e2e8f0;">
-                <input type="number" id="filter-max-amount" placeholder="最高金額" class="px-3 py-2 rounded-lg border-2 text-sm" style="border-color:#e2e8f0;">
+                <input type="number" id="filter-min-amount" placeholder="最低金額" class="px-3 py-2 rounded-lg border-2 text-sm" style="border-color: #e2e8f0;">
+                <input type="number" id="filter-max-amount" placeholder="最高金額" class="px-3 py-2 rounded-lg border-2 text-sm" style="border-color: #e2e8f0;">
               </div>
             </div>
 
             <div class="flex gap-2">
-              <button id="apply-filter-btn" class="tap-highlight flex-1 py-3 rounded-xl text-white font-semibold" style="background:#667eea;">套用篩選</button>
-              <button id="reset-filter-btn" class="tap-highlight px-4 py-3 rounded-xl font-semibold" style="background:#e2e8f0;color:#4a5568;">重置</button>
+              <button id="apply-filter-btn" class="flex-1 py-3 rounded-xl text-white font-semibold" style="background: #667eea;">套用篩選</button>
+              <button id="reset-filter-btn" class="px-4 py-3 rounded-xl font-semibold" style="background: #e2e8f0; color: #4a5568;">重置</button>
             </div>
           </div>
         </div>
@@ -108,34 +99,34 @@
         <div class="grid grid-cols-2 gap-3 mb-4">
           <div class="bg-white rounded-xl p-4 shadow-sm">
             <p class="text-sm text-gray-500 mb-1">總支出</p>
-            <p class="text-2xl font-bold" style="color:#667eea;"><span id="analysis-currency-1">NT$</span><span id="analysis-total">0</span></p>
+            <p class="text-2xl font-bold" style="color: #667eea;"><span id="analysis-currency-1">NT$</span><span id="analysis-total">0</span></p>
           </div>
           <div class="bg-white rounded-xl p-4 shadow-sm">
             <p class="text-sm text-gray-500 mb-1">筆數</p>
-            <p class="text-2xl font-bold" style="color:#667eea;"><span id="analysis-count">0</span> 筆</p>
+            <p class="text-2xl font-bold" style="color: #667eea;"><span id="analysis-count">0</span> 筆</p>
           </div>
           <div class="bg-white rounded-xl p-4 shadow-sm">
             <p class="text-sm text-gray-500 mb-1">平均消費</p>
-            <p class="text-2xl font-bold" style="color:#667eea;"><span id="analysis-currency-2">NT$</span><span id="analysis-average">0</span></p>
+            <p class="text-2xl font-bold" style="color: #667eea;"><span id="analysis-currency-2">NT$</span><span id="analysis-average">0</span></p>
           </div>
           <div class="bg-white rounded-xl p-4 shadow-sm">
             <p class="text-sm text-gray-500 mb-1">最高單筆</p>
-            <p class="text-2xl font-bold" style="color:#667eea;"><span id="analysis-currency-3">NT$</span><span id="analysis-max">0</span></p>
+            <p class="text-2xl font-bold" style="color: #667eea;"><span id="analysis-currency-3">NT$</span><span id="analysis-max">0</span></p>
           </div>
         </div>
 
         <div class="bg-white rounded-2xl p-5 shadow-sm mb-4">
-          <h3 class="font-bold text-lg mb-4" style="color:#2d3748;">📊 用途分布</h3>
+          <h3 class="font-bold text-lg mb-4" style="color: #2d3748;">📊 用途分布</h3>
           <div id="category-distribution" class="space-y-3"></div>
         </div>
 
         <div class="bg-white rounded-2xl p-5 shadow-sm mb-4">
-          <h3 class="font-bold text-lg mb-4" style="color:#2d3748;">💳 支付方式</h3>
+          <h3 class="font-bold text-lg mb-4" style="color: #2d3748;">💳 支付方式</h3>
           <div id="payment-distribution" class="space-y-3"></div>
         </div>
 
         <div class="bg-white rounded-2xl p-5 shadow-sm">
-          <h3 class="font-bold text-lg mb-4" style="color:#2d3748;">📝 消費明細</h3>
+          <h3 class="font-bold text-lg mb-4" style="color: #2d3748;">📝 消費明細</h3>
           <div id="analysis-records" class="space-y-2"></div>
         </div>
       </div>
@@ -143,48 +134,48 @@
 
     <div id="settings-screen" class="h-full flex-col hidden">
       <header class="px-6 pt-8 pb-6">
-        <button id="back-from-settings" class="tap-highlight text-white text-2xl mb-4">←</button>
+        <button id="back-from-settings" class="text-white text-2xl mb-4">←</button>
         <h1 class="text-white text-2xl font-bold">載具設定</h1>
       </header>
 
-      <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background:#f8f9fa;">
+      <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background: #f8f9fa;">
         <div class="bg-white rounded-2xl p-6 shadow-sm mb-4">
           <div class="flex items-center gap-3 mb-4">
-            <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style="background:#667eea;">📱</div>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style="background: #667eea;">📱</div>
             <div>
-              <h3 class="font-bold text-lg" style="color:#2d3748;">手機條碼載具</h3>
+              <h3 class="font-bold text-lg" style="color: #2d3748;">手機條碼載具</h3>
               <p class="text-xs text-gray-500">設定後將自動顯示您的載具條碼</p>
             </div>
           </div>
 
           <div class="mb-4">
             <label class="block text-sm font-semibold mb-2 text-gray-700">載具號碼</label>
-            <input type="text" id="carrier-number-input" placeholder="例如: /ABC1234" class="w-full px-4 py-3 rounded-xl border-2 text-lg font-mono" style="border-color:#e2e8f0;" maxlength="8">
+            <input type="text" id="carrier-number-input" placeholder="例如: /ABC1234" class="w-full px-4 py-3 rounded-xl border-2 text-lg font-mono" style="border-color: #e2e8f0;" maxlength="8">
             <p class="text-xs text-gray-500 mt-2">請輸入完整載具號碼，包含開頭的 /</p>
           </div>
 
           <div id="carrier-preview" class="hidden mb-4">
             <p class="text-sm font-semibold mb-2 text-gray-700">預覽</p>
-            <div class="bg-gray-50 rounded-xl p-4 border-2" style="border-color:#e2e8f0;">
+            <div class="bg-gray-50 rounded-xl p-4 border-2" style="border-color: #e2e8f0;">
               <div class="bg-white p-4 rounded-lg">
                 <svg viewBox="0 0 200 60" class="w-full">
-                  <rect x="5" y="5" width="2" height="50" fill="#000"/>
-                  <rect x="10" y="5" width="3" height="50" fill="#000"/>
-                  <rect x="16" y="5" width="2" height="50" fill="#000"/>
-                  <rect x="21" y="5" width="4" height="50" fill="#000"/>
-                  <rect x="28" y="5" width="2" height="50" fill="#000"/>
-                  <rect x="33" y="5" width="5" height="50" fill="#000"/>
-                  <rect x="41" y="5" width="2" height="50" fill="#000"/>
-                  <rect x="46" y="5" width="3" height="50" fill="#000"/>
-                  <rect x="52" y="5" width="2" height="50" fill="#000"/>
-                  <rect x="57" y="5" width="4" height="50" fill="#000"/>
+                  <rect x="5" y="5" width="2" height="50" fill="#000" />
+                  <rect x="10" y="5" width="3" height="50" fill="#000" />
+                  <rect x="16" y="5" width="2" height="50" fill="#000" />
+                  <rect x="21" y="5" width="4" height="50" fill="#000" />
+                  <rect x="28" y="5" width="2" height="50" fill="#000" />
+                  <rect x="33" y="5" width="5" height="50" fill="#000" />
+                  <rect x="41" y="5" width="2" height="50" fill="#000" />
+                  <rect x="46" y="5" width="3" height="50" fill="#000" />
+                  <rect x="52" y="5" width="2" height="50" fill="#000" />
+                  <rect x="57" y="5" width="4" height="50" fill="#000" />
                 </svg>
               </div>
               <p class="text-center text-sm font-mono mt-2" id="carrier-preview-text">/ABC1234</p>
             </div>
           </div>
 
-          <button id="save-carrier-btn" class="tap-highlight w-full py-3 rounded-xl text-white font-semibold" style="background:#667eea;">
+          <button id="save-carrier-btn" class="w-full py-3 rounded-xl text-white font-semibold" style="background: #667eea;">
             <span id="save-carrier-text">儲存載具設定</span>
           </button>
         </div>
@@ -193,7 +184,7 @@
           <div class="flex items-start gap-2">
             <span class="text-xl">ℹ️</span>
             <div>
-              <p class="text-sm font-semibold mb-1" style="color:#2d3748;">關於載具</p>
+              <p class="text-sm font-semibold mb-1" style="color: #2d3748;">關於載具</p>
               <p class="text-xs text-gray-600">設定後，每次記帳時會自動顯示您的載具條碼。<br>您可以隨時回到這裡修改載具號碼。</p>
             </div>
           </div>
@@ -203,19 +194,22 @@
 
     <div id="step1-screen" class="h-full flex-col hidden">
       <header class="px-6 pt-8 pb-6">
-        <button id="back-from-step1" class="tap-highlight text-white text-2xl mb-4">←</button>
+        <button id="back-from-step1" class="text-white text-2xl mb-4">←</button>
         <h1 class="text-white text-2xl font-bold">選擇消費用途</h1>
       </header>
-      <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background:#f8f9fa;">
+
+      <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background: #f8f9fa;">
         <div id="category-grid" class="grid grid-cols-3 gap-4 mb-6"></div>
-        <button id="add-category-btn" class="tap-highlight w-full py-3 rounded-xl border-2 border-dashed text-gray-600 font-semibold" style="border-color:#cbd5e0;">
-          <span class="text-xl mr-2">+</span>新增分類
+
+        <button id="add-category-btn" class="w-full py-3 rounded-xl border-2 border-dashed text-gray-600 font-semibold" style="border-color: #cbd5e0;">
+          <span class="text-xl mr-2">+</span> 新增分類
         </button>
+
         <div id="add-category-form" class="mt-4 hidden">
-          <input type="text" id="new-category-input" placeholder="輸入新分類名稱" class="w-full px-4 py-3 rounded-xl border-2 mb-3" style="border-color:#e2e8f0;">
+          <input type="text" id="new-category-input" placeholder="輸入新分類名稱" class="w-full px-4 py-3 rounded-xl border-2 mb-3" style="border-color: #e2e8f0;">
           <div class="flex gap-2">
-            <button id="save-category-btn" class="tap-highlight flex-1 py-3 rounded-xl text-white font-semibold" style="background:#667eea;">儲存</button>
-            <button id="cancel-category-btn" class="tap-highlight flex-1 py-3 rounded-xl font-semibold" style="background:#e2e8f0;color:#4a5568;">取消</button>
+            <button id="save-category-btn" class="flex-1 py-3 rounded-xl text-white font-semibold" style="background: #667eea;">儲存</button>
+            <button id="cancel-category-btn" class="flex-1 py-3 rounded-xl font-semibold" style="background: #e2e8f0; color: #4a5568;">取消</button>
           </div>
         </div>
       </div>
@@ -223,127 +217,130 @@
 
     <div id="step2-screen" class="h-full flex-col hidden">
       <header class="px-6 pt-8 pb-6">
-        <button id="back-from-step2" class="tap-highlight text-white text-2xl mb-4">←</button>
+        <button id="back-from-step2" class="text-white text-2xl mb-4">←</button>
         <h1 class="text-white text-2xl font-bold">電子發票載具</h1>
         <p class="text-white text-sm opacity-75 mt-1" id="selected-category-display"></p>
       </header>
 
-      <div class="flex-1 rounded-t-3xl px-6 py-6 flex flex-col" style="background:#f8f9fa;">
+      <div class="flex-1 rounded-t-3xl px-6 py-6 flex flex-col" style="background: #f8f9fa;">
         <div class="flex-1 flex items-center justify-center mb-6">
           <div class="w-full max-w-sm bg-white rounded-2xl p-8 shadow-lg">
             <div class="text-center mb-4">
-              <h3 class="text-lg font-bold mb-2" style="color:#2d3748;">手機條碼載具</h3>
+              <h3 class="text-lg font-bold mb-2" style="color: #2d3748;">手機條碼載具</h3>
               <p class="text-sm text-gray-500">請出示此條碼給店員掃描</p>
             </div>
-            <div class="bg-white p-6 rounded-xl border-2" style="border-color:#e2e8f0;">
+
+            <div class="bg-white p-6 rounded-xl border-2" style="border-color: #e2e8f0;">
               <svg viewBox="0 0 200 80" class="w-full">
-                <rect x="5" y="10" width="3" height="60" fill="#000"/>
-                <rect x="12" y="10" width="2" height="60" fill="#000"/>
-                <rect x="18" y="10" width="4" height="60" fill="#000"/>
-                <rect x="26" y="10" width="2" height="60" fill="#000"/>
-                <rect x="32" y="10" width="6" height="60" fill="#000"/>
-                <rect x="42" y="10" width="2" height="60" fill="#000"/>
-                <rect x="48" y="10" width="4" height="60" fill="#000"/>
-                <rect x="56" y="10" width="2" height="60" fill="#000"/>
-                <rect x="62" y="10" width="3" height="60" fill="#000"/>
-                <rect x="69" y="10" width="5" height="60" fill="#000"/>
-                <rect x="78" y="10" width="2" height="60" fill="#000"/>
-                <rect x="84" y="10" width="4" height="60" fill="#000"/>
-                <rect x="92" y="10" width="2" height="60" fill="#000"/>
-                <rect x="98" y="10" width="6" height="60" fill="#000"/>
-                <rect x="108" y="10" width="3" height="60" fill="#000"/>
-                <rect x="115" y="10" width="2" height="60" fill="#000"/>
-                <rect x="121" y="10" width="5" height="60" fill="#000"/>
-                <rect x="130" y="10" width="2" height="60" fill="#000"/>
-                <rect x="136" y="10" width="4" height="60" fill="#000"/>
-                <rect x="144" y="10" width="3" height="60" fill="#000"/>
-                <rect x="151" y="10" width="2" height="60" fill="#000"/>
-                <rect x="157" y="10" width="6" height="60" fill="#000"/>
-                <rect x="167" y="10" width="2" height="60" fill="#000"/>
-                <rect x="173" y="10" width="4" height="60" fill="#000"/>
-                <rect x="181" y="10" width="3" height="60" fill="#000"/>
-                <rect x="188" y="10" width="2" height="60" fill="#000"/>
+                <rect x="5" y="10" width="3" height="60" fill="#000" />
+                <rect x="12" y="10" width="2" height="60" fill="#000" />
+                <rect x="18" y="10" width="4" height="60" fill="#000" />
+                <rect x="26" y="10" width="2" height="60" fill="#000" />
+                <rect x="32" y="10" width="6" height="60" fill="#000" />
+                <rect x="42" y="10" width="2" height="60" fill="#000" />
+                <rect x="48" y="10" width="4" height="60" fill="#000" />
+                <rect x="56" y="10" width="2" height="60" fill="#000" />
+                <rect x="62" y="10" width="3" height="60" fill="#000" />
+                <rect x="69" y="10" width="5" height="60" fill="#000" />
+                <rect x="78" y="10" width="2" height="60" fill="#000" />
+                <rect x="84" y="10" width="4" height="60" fill="#000" />
+                <rect x="92" y="10" width="2" height="60" fill="#000" />
+                <rect x="98" y="10" width="6" height="60" fill="#000" />
+                <rect x="108" y="10" width="3" height="60" fill="#000" />
+                <rect x="115" y="10" width="2" height="60" fill="#000" />
+                <rect x="121" y="10" width="5" height="60" fill="#000" />
+                <rect x="130" y="10" width="2" height="60" fill="#000" />
+                <rect x="136" y="10" width="4" height="60" fill="#000" />
+                <rect x="144" y="10" width="3" height="60" fill="#000" />
+                <rect x="151" y="10" width="2" height="60" fill="#000" />
+                <rect x="157" y="10" width="6" height="60" fill="#000" />
+                <rect x="167" y="10" width="2" height="60" fill="#000" />
+                <rect x="173" y="10" width="4" height="60" fill="#000" />
+                <rect x="181" y="10" width="3" height="60" fill="#000" />
+                <rect x="188" y="10" width="2" height="60" fill="#000" />
               </svg>
             </div>
+
             <p class="text-center text-xs text-gray-400 mt-3" id="carrier-display-text">/ABC1234</p>
           </div>
         </div>
+
         <div class="space-y-3">
-          <button id="skip-carrier-btn" class="tap-highlight w-full py-4 rounded-xl font-semibold" style="background:#e2e8f0;color:#4a5568;">跳過載具，直接付款</button>
-          <button id="continue-to-payment-btn" class="tap-highlight w-full py-4 rounded-xl text-white font-semibold" style="background:#667eea;">使用載具後繼續</button>
+          <button id="skip-carrier-btn" class="w-full py-4 rounded-xl font-semibold" style="background: #e2e8f0; color: #4a5568;">跳過載具，直接付款</button>
+          <button id="continue-to-payment-btn" class="w-full py-4 rounded-xl text-white font-semibold" style="background: #667eea;">使用載具後繼續</button>
         </div>
       </div>
     </div>
 
     <div id="step3-screen" class="h-full flex-col hidden">
       <header class="px-6 pt-8 pb-6">
-        <button id="back-from-step3" class="tap-highlight text-white text-2xl mb-4">←</button>
+        <button id="back-from-step3" class="text-white text-2xl mb-4">←</button>
         <h1 class="text-white text-2xl font-bold">選擇支付方式</h1>
         <p class="text-white text-sm opacity-75 mt-1" id="selected-category-display2"></p>
       </header>
 
-      <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background:#f8f9fa;">
+      <div class="flex-1 rounded-t-3xl px-6 py-6 overflow-auto" style="background: #f8f9fa;">
         <div class="space-y-3 mb-6">
-          <button class="payment-method-btn tap-highlight w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="LINE Pay" data-color="#00B900" data-emoji="💚">
+          <button class="payment-method-btn w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="LINE Pay" data-color="#00B900" data-emoji="💚">
             <div class="flex items-center">
-              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background:#00B900;">💚</div>
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background: #00B900;">💚</div>
               <div>
-                <div class="font-semibold text-lg text-left" style="color:#2d3748;">LINE Pay</div>
+                <div class="font-semibold text-lg text-left" style="color: #2d3748;">LINE Pay</div>
                 <div class="text-xs text-gray-500">Deep Link 跳轉</div>
               </div>
             </div>
             <span class="text-gray-400">→</span>
           </button>
 
-          <button class="payment-method-btn tap-highlight w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="Taiwan Pay" data-color="#0066CC" data-emoji="🏦">
+          <button class="payment-method-btn w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="Taiwan Pay" data-color="#0066CC" data-emoji="🏦">
             <div class="flex items-center">
-              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background:#0066CC;">🏦</div>
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background: #0066CC;">🏦</div>
               <div>
-                <div class="font-semibold text-lg text-left" style="color:#2d3748;">Taiwan Pay</div>
+                <div class="font-semibold text-lg text-left" style="color: #2d3748;">Taiwan Pay</div>
                 <div class="text-xs text-gray-500">Deep Link 跳轉</div>
               </div>
             </div>
             <span class="text-gray-400">→</span>
           </button>
 
-          <button class="payment-method-btn tap-highlight w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="全支付" data-color="#FF6B00" data-emoji="🔶">
+          <button class="payment-method-btn w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="全支付" data-color="#FF6B00" data-emoji="🔶">
             <div class="flex items-center">
-              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background:#FF6B00;">🔶</div>
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background: #FF6B00;">🔶</div>
               <div>
-                <div class="font-semibold text-lg text-left" style="color:#2d3748;">全支付 PX Pay</div>
+                <div class="font-semibold text-lg text-left" style="color: #2d3748;">全支付 PX Pay</div>
                 <div class="text-xs text-gray-500">Deep Link 跳轉</div>
               </div>
             </div>
             <span class="text-gray-400">→</span>
           </button>
 
-          <button class="payment-method-btn tap-highlight w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="街口支付" data-color="#FF3B3B" data-emoji="🏪">
+          <button class="payment-method-btn w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="街口支付" data-color="#FF3B3B" data-emoji="🏪">
             <div class="flex items-center">
-              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background:#FF3B3B;">🏪</div>
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background: #FF3B3B;">🏪</div>
               <div>
-                <div class="font-semibold text-lg text-left" style="color:#2d3748;">街口支付</div>
+                <div class="font-semibold text-lg text-left" style="color: #2d3748;">街口支付</div>
                 <div class="text-xs text-gray-500">Deep Link 跳轉</div>
               </div>
             </div>
             <span class="text-gray-400">→</span>
           </button>
 
-          <button class="payment-method-btn tap-highlight w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="悠遊付" data-color="#0088FF" data-emoji="🚇">
+          <button class="payment-method-btn w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="悠遊付" data-color="#0088FF" data-emoji="🚇">
             <div class="flex items-center">
-              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background:#0088FF;">🚇</div>
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background: #0088FF;">🚇</div>
               <div>
-                <div class="font-semibold text-lg text-left" style="color:#2d3748;">悠遊付</div>
+                <div class="font-semibold text-lg text-left" style="color: #2d3748;">悠遊付</div>
                 <div class="text-xs text-gray-500">Deep Link 跳轉</div>
               </div>
             </div>
             <span class="text-gray-400">→</span>
           </button>
 
-          <button class="payment-method-btn tap-highlight w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="現金" data-color="#48BB78" data-emoji="💵">
+          <button class="payment-method-btn w-full p-5 rounded-2xl bg-white shadow-sm flex items-center justify-between" data-method="現金" data-color="#48BB78" data-emoji="💵">
             <div class="flex items-center">
-              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background:#48BB78;">💵</div>
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-4" style="background: #48BB78;">💵</div>
               <div>
-                <div class="font-semibold text-lg text-left" style="color:#2d3748;">現金</div>
+                <div class="font-semibold text-lg text-left" style="color: #2d3748;">現金</div>
                 <div class="text-xs text-gray-500">手動輸入金額</div>
               </div>
             </div>
@@ -353,34 +350,39 @@
       </div>
     </div>
 
-    <div id="payment-redirect-screen" class="h-full flex-col hidden" style="background:#000;">
+    <div id="payment-redirect-screen" class="h-full flex-col hidden" style="background: #000000;">
       <div class="flex-1 flex items-center justify-center px-6">
         <div class="text-center">
           <div class="relative inline-block mb-8">
-            <div class="absolute inset-0 w-32 h-32 rounded-full pulse-ring" id="pulse-ring" style="background:rgba(0,185,0,.3);"></div>
-            <div class="w-32 h-32 rounded-3xl mx-auto flex items-center justify-center text-6xl shadow-2xl relative z-10" id="redirect-payment-icon" style="background:#00B900;">💚</div>
+            <div class="absolute inset-0 w-32 h-32 rounded-full pulse-ring" id="pulse-ring" style="background: rgba(0, 185, 0, 0.3);"></div>
+            <div class="w-32 h-32 rounded-3xl mx-auto flex items-center justify-center text-6xl shadow-2xl relative z-10" id="redirect-payment-icon" style="background: #00B900;">💚</div>
           </div>
           <h2 class="text-white text-2xl font-bold mb-3" id="redirect-payment-name">LINE Pay</h2>
           <p class="text-white text-lg opacity-75 mb-8">正在啟動支付 APP...</p>
+
           <div class="flex justify-center space-x-2 mb-8">
-            <div class="w-3 h-3 bg-white rounded-full animate-bounce" style="animation-delay:0s;"></div>
-            <div class="w-3 h-3 bg-white rounded-full animate-bounce" style="animation-delay:.2s;"></div>
-            <div class="w-3 h-3 bg-white rounded-full animate-bounce" style="animation-delay:.4s;"></div>
+            <div class="w-3 h-3 bg-white rounded-full animate-bounce" style="animation-delay: 0s;"></div>
+            <div class="w-3 h-3 bg-white rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+            <div class="w-3 h-3 bg-white rounded-full animate-bounce" style="animation-delay: 0.4s;"></div>
           </div>
+
           <div class="bg-white bg-opacity-10 rounded-2xl p-4 backdrop-blur-lg max-w-sm mx-auto">
             <p class="text-white text-xs opacity-75 mb-2">🔗 Deep Link URL</p>
             <p class="text-white text-xs font-mono break-all opacity-50" id="deep-link-url">line://pay/generateQR</p>
           </div>
-          <div class="mt-6 space-y-3">
-            <button id="manual-open-deeplink-btn" class="tap-highlight w-full max-w-sm mx-auto py-3 rounded-xl text-white font-semibold" style="background:rgba(255,255,255,.12);backdrop-filter:blur(10px);">手動開啟支付 App</button>
-            <button id="back-from-redirect" class="tap-highlight w-full max-w-sm mx-auto py-3 rounded-xl font-semibold" style="background:#e2e8f0;color:#4a5568;">返回選擇支付方式</button>
+
+          <div class="mt-5">
+            <button id="manual-open-app-btn" class="px-5 py-3 rounded-xl text-white font-semibold" style="background: rgba(255,255,255,0.15);">
+              手動開啟支付 APP
+            </button>
+            <p class="text-white text-xs opacity-50 mt-3">若自動跳轉失敗，可按上方按鈕重試</p>
           </div>
         </div>
       </div>
     </div>
 
     <div id="external-payment-screen" class="h-full flex-col hidden">
-      <div class="px-6 py-6" id="external-payment-header" style="background:#00B900;">
+      <div class="px-6 py-6" id="external-payment-header" style="background: #00B900;">
         <div class="flex items-center justify-between mb-4">
           <span class="text-white text-sm">● 9:41</span>
           <div class="flex gap-1">
@@ -394,39 +396,47 @@
         <p class="text-white text-sm opacity-75">付款確認</p>
       </div>
 
-      <div class="flex-1 flex flex-col" style="background:#f0f0f0;">
+      <div class="flex-1 flex flex-col" style="background: #f0f0f0;">
         <div class="flex-1 flex flex-col items-center justify-center px-6 py-8">
           <div class="w-full max-w-sm bg-white rounded-3xl p-8 shadow-xl mb-6">
             <div class="text-center mb-6">
-              <div class="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl" id="external-icon" style="background:#f0f0f0;">💚</div>
+              <div class="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-4xl" id="external-icon" style="background: #f0f0f0;">💚</div>
               <p class="text-sm text-gray-500 mb-3">付款金額</p>
               <div class="mb-6">
-                <input type="number" id="external-amount-input" placeholder="請輸入金額" class="text-5xl font-bold text-center border-0 outline-none bg-transparent w-full" style="color:#2d3748;" inputmode="decimal" value="">
+                <input type="number" id="external-amount-input" placeholder="請輸入金額" class="text-5xl font-bold text-center border-0 outline-none bg-transparent w-full" style="color: #2d3748;" inputmode="decimal" value="">
                 <div class="flex items-center justify-center mt-2"><span class="text-lg text-gray-400">NT$</span></div>
               </div>
+
               <div class="bg-gray-50 rounded-xl p-4 mb-4">
                 <p class="text-xs text-gray-500 mb-1">付款用途</p>
-                <p class="text-base font-semibold" style="color:#2d3748;" id="external-payment-category">早餐</p>
+                <p class="text-base font-semibold" style="color: #2d3748;" id="external-payment-category">早餐</p>
               </div>
             </div>
-            <div class="space-y-3 border-t pt-4" style="border-color:#e2e8f0;">
-              <div class="flex justify-between text-sm py-1"><span class="text-gray-500">可用餘額</span><span class="font-semibold text-green-600">NT$ 8,520</span></div>
-              <div class="flex justify-between text-sm py-1"><span class="text-gray-500">付款後餘額</span><span class="font-semibold" style="color:#2d3748;" id="remaining-balance">NT$ 8,520</span></div>
+
+            <div class="space-y-3 border-t pt-4" style="border-color: #e2e8f0;">
+              <div class="flex justify-between text-sm py-1">
+                <span class="text-gray-500">可用餘額</span>
+                <span class="font-semibold text-green-600">NT$ 8,520</span>
+              </div>
+              <div class="flex justify-between text-sm py-1">
+                <span class="text-gray-500">付款後餘額</span>
+                <span class="font-semibold" style="color: #2d3748;" id="remaining-balance">NT$ 8,520</span>
+              </div>
             </div>
           </div>
 
-          <button id="confirm-external-payment-btn" class="tap-highlight w-full max-w-sm py-5 rounded-2xl text-white text-lg font-bold shadow-lg mb-3" style="background:#00B900;">
+          <button id="confirm-external-payment-btn" class="w-full max-w-sm py-5 rounded-2xl text-white text-lg font-bold shadow-lg mb-3" style="background: #00B900;">
             <span id="confirm-btn-text">確認付款</span>
           </button>
-          <button id="cancel-external-payment-btn" class="tap-highlight w-full max-w-sm py-4 rounded-2xl font-semibold" style="background:#e2e8f0;color:#666;">取消</button>
+          <button id="cancel-external-payment-btn" class="w-full max-w-sm py-4 rounded-2xl font-semibold" style="background: #e2e8f0; color: #666;">取消</button>
         </div>
 
-        <div class="px-6 py-4 bg-white border-t" style="border-color:#e2e8f0;">
+        <div class="px-6 py-4 bg-white border-t" style="border-color: #e2e8f0;">
           <div class="flex items-start gap-2">
             <span class="text-lg">🔒</span>
             <div>
-              <p class="text-xs font-semibold mb-1" style="color:#2d3748;">安全提示</p>
-              <p class="text-xs text-gray-500">本畫面為模擬示範｜實際使用時會在真實的支付 APP 中完成付款</p>
+              <p class="text-xs font-semibold mb-1" style="color: #2d3748;">安全提示</p>
+              <p class="text-xs text-gray-500">本畫面為模擬示範，實際使用時會在真實的支付 APP 中完成付款</p>
             </div>
           </div>
         </div>
@@ -434,28 +444,32 @@
     </div>
 
     <div id="payment-success-screen" class="h-full flex-col hidden">
-      <div class="flex-1 flex items-center justify-center px-6" style="background:linear-gradient(135deg,#48BB78 0%,#38A169 100%);">
+      <div class="flex-1 flex items-center justify-center px-6" style="background: linear-gradient(135deg, #48BB78 0%, #38A169 100%);">
         <div class="text-center">
           <div class="relative inline-block mb-8">
             <div class="absolute inset-0 w-32 h-32 rounded-full bg-white opacity-20 animate-ping"></div>
             <div class="w-32 h-32 rounded-full mx-auto flex items-center justify-center bg-white shadow-2xl relative z-10"><span class="text-7xl">✓</span></div>
           </div>
+
           <h2 class="text-white text-3xl font-bold mb-3">付款成功！</h2>
+
           <div class="bg-white bg-opacity-20 rounded-2xl px-8 py-5 mb-6 backdrop-blur-lg">
             <p class="text-white text-sm opacity-90 mb-2">已付款</p>
             <p class="text-white text-5xl font-bold mb-1"><span id="success-currency">NT$</span><span id="success-amount">0</span></p>
             <p class="text-white text-xs opacity-75 mt-2" id="success-category">早餐</p>
           </div>
+
           <div class="mb-6">
             <p class="text-white text-base opacity-90 mb-3">正在返回記帳 APP...</p>
             <div class="flex justify-center space-x-2">
               <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-              <div class="w-2 h-2 bg-white rounded-full animate-pulse" style="animation-delay:.2s;"></div>
-              <div class="w-2 h-2 bg-white rounded-full animate-pulse" style="animation-delay:.4s;"></div>
+              <div class="w-2 h-2 bg-white rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
+              <div class="w-2 h-2 bg-white rounded-full animate-pulse" style="animation-delay: 0.4s;"></div>
             </div>
           </div>
+
           <div class="bg-white bg-opacity-10 rounded-xl p-3 backdrop-blur-lg max-w-sm mx-auto">
-            <p class="text-white text-xs opacity-75">✨ 金額已自動回填並儲存到您的記帳本</p>
+            <p class="text-white text-xs opacity-75">✨ 金額將自動回填並儲存到您的記帳本</p>
           </div>
         </div>
       </div>
@@ -463,7 +477,7 @@
 
     <div id="step4-screen" class="h-full flex-col hidden">
       <header class="px-6 pt-8 pb-6">
-        <button id="back-from-step4" class="tap-highlight text-white text-2xl mb-4">←</button>
+        <button id="back-from-step4" class="text-white text-2xl mb-4">←</button>
         <h1 class="text-white text-2xl font-bold">輸入金額</h1>
         <div class="mt-3 text-white text-sm opacity-90">
           <p>分類: <span id="final-category-display" class="font-semibold"></span></p>
@@ -471,44 +485,43 @@
         </div>
       </header>
 
-      <div class="flex-1 rounded-t-3xl px-6 py-6 flex flex-col" style="background:#f8f9fa;">
+      <div class="flex-1 rounded-t-3xl px-6 py-6 flex flex-col" style="background: #f8f9fa;">
         <div class="flex-1 flex flex-col justify-center mb-6">
           <div class="text-center mb-8">
             <div class="flex items-baseline justify-center">
               <span id="currency-symbol-input" class="text-3xl text-gray-600 mr-2">NT$</span>
-              <input type="number" id="amount-input" placeholder="0" class="text-6xl font-bold text-center border-0 outline-none bg-transparent w-full" style="color:#2d3748;" inputmode="decimal">
+              <input type="number" id="amount-input" placeholder="0" class="text-6xl font-bold text-center border-0 outline-none bg-transparent w-full" style="color: #2d3748;" inputmode="decimal">
             </div>
           </div>
 
           <div class="bg-white rounded-2xl p-4 shadow-sm">
             <label class="block text-sm font-semibold mb-2 text-gray-700">備註 (選填)</label>
-            <textarea id="note-input" placeholder="新增備註..." class="w-full px-4 py-3 rounded-xl border-2 resize-none" style="border-color:#e2e8f0;" rows="3"></textarea>
+            <textarea id="note-input" placeholder="新增備註..." class="w-full px-4 py-3 rounded-xl border-2 resize-none" style="border-color: #e2e8f0;" rows="3"></textarea>
           </div>
         </div>
 
-        <button id="save-expense-btn" class="tap-highlight w-full py-4 rounded-xl text-white font-semibold text-lg shadow-lg" style="background:#667eea;">
+        <button id="save-expense-btn" class="w-full py-4 rounded-xl text-white font-semibold text-lg shadow-lg" style="background: #667eea;">
           <span id="save-btn-text">儲存記錄</span>
         </button>
       </div>
     </div>
 
-    <div id="edit-modal" class="hidden fixed inset-0 z-50">
-      <div id="edit-modal-backdrop" class="absolute inset-0 modal-backdrop"></div>
-      <div class="absolute inset-x-0 bottom-0 sheet bg-white p-5 shadow-2xl">
+    <div id="edit-modal" class="fixed inset-0 hidden items-end sm:items-center justify-center z-50 modal-backdrop">
+      <div class="w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-bold" style="color:#2d3748;">編輯記錄</h3>
-          <button id="close-edit-modal" class="tap-highlight w-10 h-10 rounded-full bg-gray-100 text-xl flex items-center justify-center">✕</button>
+          <button id="close-edit-modal" class="text-2xl leading-none" style="color:#718096;">×</button>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-4">
           <div>
-            <label class="block text-sm font-semibold mb-2 text-gray-700">用途</label>
-            <select id="edit-category" class="w-full px-3 py-3 rounded-xl border-2 text-base" style="border-color:#e2e8f0;"></select>
+            <label class="block text-sm font-semibold mb-2 text-gray-700">分類</label>
+            <select id="edit-category" class="w-full px-3 py-3 rounded-xl border-2 text-sm" style="border-color:#e2e8f0;"></select>
           </div>
 
           <div>
             <label class="block text-sm font-semibold mb-2 text-gray-700">支付方式</label>
-            <select id="edit-payment-method" class="w-full px-3 py-3 rounded-xl border-2 text-base" style="border-color:#e2e8f0;">
+            <select id="edit-payment" class="w-full px-3 py-3 rounded-xl border-2 text-sm" style="border-color:#e2e8f0;">
               <option value="現金">現金</option>
               <option value="LINE Pay">LINE Pay</option>
               <option value="Taiwan Pay">Taiwan Pay</option>
@@ -520,116 +533,187 @@
 
           <div>
             <label class="block text-sm font-semibold mb-2 text-gray-700">金額</label>
-            <input id="edit-amount" type="number" inputmode="decimal" class="w-full px-4 py-3 rounded-xl border-2 text-lg font-semibold" style="border-color:#e2e8f0;" placeholder="0">
-          </div>
-
-          <div>
-            <label class="block text-sm font-semibold mb-2 text-gray-700">日期時間</label>
-            <input id="edit-datetime" type="datetime-local" class="w-full px-4 py-3 rounded-xl border-2 text-base" style="border-color:#e2e8f0;">
+            <div class="flex items-center gap-2">
+              <span class="text-gray-500 font-semibold" id="edit-currency">NT$</span>
+              <input id="edit-amount" type="number" class="w-full px-3 py-3 rounded-xl border-2 text-lg font-bold" style="border-color:#e2e8f0;" inputmode="decimal">
+            </div>
           </div>
 
           <div>
             <label class="block text-sm font-semibold mb-2 text-gray-700">備註</label>
-            <textarea id="edit-note" class="w-full px-4 py-3 rounded-xl border-2 resize-none" style="border-color:#e2e8f0;" rows="2" placeholder="(選填)"></textarea>
+            <textarea id="edit-note" class="w-full px-3 py-3 rounded-xl border-2 text-sm resize-none" style="border-color:#e2e8f0;" rows="3"></textarea>
           </div>
 
-          <div class="flex gap-2 pt-2">
-            <button id="delete-record-btn" class="tap-highlight flex-1 py-3 rounded-xl font-semibold" style="background:#fee2e2;color:#b91c1c;">刪除</button>
-            <button id="save-edit-btn" class="tap-highlight flex-1 py-3 rounded-xl text-white font-semibold" style="background:#667eea;">儲存</button>
+          <div class="flex gap-2 pt-1">
+            <button id="delete-record-btn" class="px-4 py-3 rounded-xl font-semibold" style="background:#fee2e2;color:#b91c1c;">刪除</button>
+            <button id="save-edit-btn" class="flex-1 py-3 rounded-xl text-white font-semibold" style="background:#667eea;">儲存修改</button>
           </div>
-          <p class="text-xs text-gray-400">刪除為軟刪除（不顯示於列表），可避免資料 SDK 不支援真刪除造成錯誤。</p>
+
+          <p class="text-xs text-gray-400" id="edit-meta"></p>
         </div>
       </div>
     </div>
 
-    <div id="confirm-delete-modal" class="hidden fixed inset-0 z-50">
-      <div class="absolute inset-0 modal-backdrop"></div>
-      <div class="absolute inset-x-0 bottom-0 sheet bg-white p-5 shadow-2xl">
-        <h3 class="text-lg font-bold mb-2" style="color:#2d3748;">確定要刪除？</h3>
-        <p class="text-sm text-gray-600 mb-4">刪除後這筆記錄將不會再出現在列表中。</p>
-        <div class="flex gap-2">
-          <button id="cancel-delete-confirm-btn" class="tap-highlight flex-1 py-3 rounded-xl font-semibold" style="background:#e2e8f0;color:#4a5568;">取消</button>
-          <button id="confirm-delete-btn" class="tap-highlight flex-1 py-3 rounded-xl text-white font-semibold" style="background:#ef4444;">刪除</button>
-        </div>
-      </div>
-    </div>
   </div>
 
   <script>
-    const defaultConfig={app_title:"智慧記帳",currency_symbol:"NT$"};
+    const defaultConfig = { app_title: "智慧記帳", currency_symbol: "NT$" };
 
-    let allRecords=[];
-    let carrierSettings=null;
-    let currentFlow={category:"",paymentMethod:"",paymentColor:"",paymentEmoji:"",carrierUsed:false,pendingAmount:0};
+    let allRecords = [];
+    let carrierSettings = null;
 
-    const defaultCategories=["早餐","午餐","晚餐","交通","娛樂","購物","其他"];
-    let customCategories=[];
-
-    let analysisFilters={startDate:null,endDate:null,category:"all",minAmount:null,maxAmount:null};
-
-    let editingRecordId=null;
-
-    const dataHandler={
-      onDataChanged(data){
-        const settings=data.find(r=>r && r.is_settings===true);
-        const expenses=data.filter(r=>r && r.is_settings!==true && r.is_deleted!==true);
-        carrierSettings=settings||null;
-        allRecords=expenses.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
-        updateUI();
-        updateCarrierDisplay();
-        refreshAnalysisIfVisible();
-      }
+    let currentFlow = {
+      category: "",
+      paymentMethod: "",
+      paymentColor: "",
+      paymentEmoji: "",
+      carrierUsed: false,
+      pendingAmount: 0
     };
 
-    async function onConfigChange(config){
-      document.querySelectorAll("#app-title").forEach(el=>el.textContent=config.app_title||defaultConfig.app_title);
-      document.querySelectorAll("#currency-symbol,#currency-symbol-input,#success-currency,#analysis-currency-1,#analysis-currency-2,#analysis-currency-3").forEach(el=>{
-        el.textContent=config.currency_symbol||defaultConfig.currency_symbol
-      });
+    const defaultCategories = ["早餐", "午餐", "晚餐", "交通", "娛樂", "購物", "其他"];
+    let customCategories = [];
+
+    let analysisFilters = { startDate: null, endDate: null, category: "all", minAmount: null, maxAmount: null };
+
+    let editingRecordId = null;
+
+    const iosDeepLinks = {
+      "LINE Pay": "line://pay/generateQR",
+      "Taiwan Pay": "twmpshortcut://?type=payment",
+      "全支付": "com.pxpay.plus://zjdja",
+      "街口支付": "jkos://showQRCode",
+      "悠遊付": "tw.com.easycard.easycardwallet://paymentCode"
+    };
+
+    const LS_KEY = "blip_expenses_v1";
+
+    function lsLoadExpenses(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        return raw ? JSON.parse(raw) : [];
+      }catch(e){ return []; }
     }
 
-    function showScreen(screenId){
-      const screens=["main-screen","analysis-screen","settings-screen","step1-screen","step2-screen","step3-screen","step4-screen","payment-redirect-screen","external-payment-screen","payment-success-screen"];
-      screens.forEach(id=>{
-        const screen=document.getElementById(id);
-        if(!screen) return;
-        if(id===screenId){
-          screen.classList.remove("hidden");
-          screen.classList.add("flex","fade-in");
+    function lsSaveExpenses(list){
+      try{
+        localStorage.setItem(LS_KEY, JSON.stringify(list));
+        return true;
+      }catch(e){ return false; }
+    }
+
+    function lsUpsertExpense(record){
+      const list = lsLoadExpenses();
+      const idx = list.findIndex(r => String(r.id) === String(record.id));
+      if(idx >= 0) list[idx] = record;
+      else list.unshift(record);
+      lsSaveExpenses(list);
+      return list;
+    }
+
+    function lsReplaceAll(list){
+      lsSaveExpenses(list);
+      return list;
+    }
+
+    async function withTimeout(promise, ms=2500){
+      let t;
+      const timeout = new Promise((_, reject) => { t = setTimeout(() => reject(new Error("TIMEOUT")), ms); });
+      try{ return await Promise.race([promise, timeout]); }
+      finally{ clearTimeout(t); }
+    }
+
+    async function safeCreateExpense(record){
+      try{
+        if(window.dataSdk && typeof window.dataSdk.create === "function"){
+          const res = await withTimeout(window.dataSdk.create(record), 2500);
+          if(res && res.isOk) return { ok:true, via:"dataSdk" };
+          lsUpsertExpense(record);
+          return { ok:false, via:"localStorage", reason:"dataSdk_not_ok" };
         }else{
-          screen.classList.add("hidden");
-          screen.classList.remove("flex");
+          lsUpsertExpense(record);
+          return { ok:false, via:"localStorage", reason:"dataSdk_missing" };
         }
-      });
+      }catch(e){
+        lsUpsertExpense(record);
+        return { ok:false, via:"localStorage", reason:String(e?.message || e) };
+      }
+    }
+
+    async function safeUpdateExpense(record){
+      try{
+        if(window.dataSdk && typeof window.dataSdk.update === "function"){
+          const res = await withTimeout(window.dataSdk.update(record), 2500);
+          if(res && res.isOk) return { ok:true, via:"dataSdk" };
+          lsUpsertExpense(record);
+          return { ok:false, via:"localStorage", reason:"dataSdk_not_ok" };
+        }else{
+          lsUpsertExpense(record);
+          return { ok:false, via:"localStorage", reason:"dataSdk_missing" };
+        }
+      }catch(e){
+        lsUpsertExpense(record);
+        return { ok:false, via:"localStorage", reason:String(e?.message || e) };
+      }
+    }
+
+    function mergeLocalStorageIntoUI(){
+      const ls = lsLoadExpenses().filter(r => r && r.is_settings !== true && r.is_deleted !== true);
+      if(ls.length){
+        ls.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+        allRecords = ls;
+        updateUI();
+        refreshAnalysisIfVisible();
+      }
+    }
+
+    function syncUIToLocalStorage(){
+      try{
+        const list = allRecords.map(r => ({...r, is_deleted: !!r.is_deleted}));
+        lsReplaceAll(list);
+      }catch(e){}
     }
 
     function showSuccessMessage(message){
-      const div=document.createElement("div");
-      div.textContent=message;
-      div.className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50";
+      const div = document.createElement("div");
+      div.textContent = message;
+      div.className = "fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50";
       document.body.appendChild(div);
       setTimeout(()=>div.remove(),2000);
     }
 
     function showErrorMessage(message){
-      const div=document.createElement("div");
-      div.textContent=message;
-      div.className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg z-50";
+      const div = document.createElement("div");
+      div.textContent = message;
+      div.className = "fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg z-50";
       document.body.appendChild(div);
-      setTimeout(()=>div.remove(),2000);
+      setTimeout(()=>div.remove(),2200);
+    }
+
+    async function onConfigChange(config){
+      const appTitleElements = document.querySelectorAll("#app-title");
+      appTitleElements.forEach(el => { el.textContent = config.app_title || defaultConfig.app_title; });
+
+      const currencyElements = document.querySelectorAll("#currency-symbol, #currency-symbol-input, #success-currency, #analysis-currency-1, #analysis-currency-2, #analysis-currency-3, #edit-currency");
+      currencyElements.forEach(el => { el.textContent = config.currency_symbol || defaultConfig.currency_symbol; });
     }
 
     function updateCarrierDisplay(){
+      const display = document.getElementById("carrier-display-text");
+      const input = document.getElementById("carrier-number-input");
+      const prevText = document.getElementById("carrier-preview-text");
+      const prevBox = document.getElementById("carrier-preview");
+
       if(carrierSettings && carrierSettings.carrier_number){
-        const t=carrierSettings.carrier_number;
-        document.getElementById("carrier-display-text").textContent=t;
-        document.getElementById("carrier-number-input").value=t;
-        document.getElementById("carrier-preview-text").textContent=t;
-        document.getElementById("carrier-preview").classList.remove("hidden");
+        const v = carrierSettings.carrier_number;
+        display.textContent = v;
+        input.value = v;
+        prevText.textContent = v;
+        prevBox.classList.remove("hidden");
       }else{
-        document.getElementById("carrier-display-text").textContent="/ABC1234";
-        document.getElementById("carrier-number-input").value="";
-        document.getElementById("carrier-preview").classList.add("hidden");
+        display.textContent = "/ABC1234";
+        input.value = "";
+        prevBox.classList.add("hidden");
       }
     }
 
@@ -637,763 +721,751 @@
       updateTotalAmount();
       updateCategoryStats();
       updateRecentRecords();
+      syncUIToLocalStorage();
     }
 
     function updateTotalAmount(){
-      const total=allRecords.reduce((sum,r)=>sum+(r.amount||0),0);
-      document.getElementById("total-amount").textContent=total.toLocaleString();
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = now.getMonth();
+      const total = allRecords
+        .filter(r => {
+          const d = new Date(r.timestamp);
+          return d.getFullYear() === y && d.getMonth() === m;
+        })
+        .reduce((sum, r) => sum + (Number(r.amount)||0), 0);
+
+      document.getElementById("total-amount").textContent = total.toLocaleString();
     }
 
     function updateCategoryStats(){
-      const statsContainer=document.getElementById("category-stats");
-      const totals={};
-      allRecords.forEach(r=>{
-        if(!r.category) return;
-        totals[r.category]=(totals[r.category]||0)+(r.amount||0);
+      const statsContainer = document.getElementById("category-stats");
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = now.getMonth();
+
+      const categoryTotals = {};
+      allRecords.forEach(record => {
+        const d = new Date(record.timestamp);
+        if(d.getFullYear() !== y || d.getMonth() !== m) return;
+        const c = record.category || "未分類";
+        categoryTotals[c] = (categoryTotals[c] || 0) + (Number(record.amount)||0);
       });
-      const sorted=Object.entries(totals).sort((a,b)=>b[1]-a[1]).slice(0,5);
-      if(sorted.length===0){
-        statsContainer.innerHTML='<p class="text-gray-500 text-center py-4">尚無消費記錄</p>';
+
+      const sorted = Object.entries(categoryTotals).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+      if(sorted.length === 0){
+        statsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">尚無消費記錄</p>';
         return;
       }
-      const maxAmount=Math.max(...sorted.map(x=>x[1]));
-      statsContainer.innerHTML=sorted.map(([category,amount])=>{
-        const pct=(amount/maxAmount)*100;
+
+      const maxAmount = Math.max(...sorted.map(x=>x[1]));
+      const currency = (window.elementSdk?.config?.currency_symbol || defaultConfig.currency_symbol);
+
+      statsContainer.innerHTML = sorted.map(([category, amount]) => {
+        const percentage = maxAmount ? (amount/maxAmount)*100 : 0;
         return `
           <div class="bg-white rounded-xl p-4 shadow-sm">
             <div class="flex justify-between mb-2">
-              <span class="font-semibold" style="color:#2d3748;">${category}</span>
-              <span class="font-bold" style="color:#667eea;">${(window.elementSdk?.config?.currency_symbol||defaultConfig.currency_symbol)}${amount.toLocaleString()}</span>
+              <span class="font-semibold" style="color: #2d3748;">${escapeHtml(category)}</span>
+              <span class="font-bold" style="color: #667eea;">${escapeHtml(currency)}${Number(amount).toLocaleString()}</span>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2">
-              <div class="h-2 rounded-full" style="width:${pct}%;background:#667eea;"></div>
+              <div class="h-2 rounded-full" style="width: ${percentage}%; background: #667eea;"></div>
             </div>
           </div>
         `;
       }).join("");
-    }
-
-    function toLocalDateTimeInputValue(iso){
-      try{
-        const d=new Date(iso);
-        const pad=n=>String(n).padStart(2,"0");
-        const yyyy=d.getFullYear();
-        const mm=pad(d.getMonth()+1);
-        const dd=pad(d.getDate());
-        const hh=pad(d.getHours());
-        const mi=pad(d.getMinutes());
-        return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
-      }catch(e){
-        return "";
-      }
     }
 
     function updateRecentRecords(){
-      const container=document.getElementById("recent-records");
-      const recent=allRecords.slice(0,10);
-      if(recent.length===0){
-        container.innerHTML='<p class="text-gray-500 text-center py-4">尚無消費記錄</p>';
+      const container = document.getElementById("recent-records");
+      const recent = allRecords.slice(0, 20);
+
+      if(recent.length === 0){
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">尚無消費記錄</p>';
         return;
       }
 
-      container.innerHTML=recent.map(r=>{
-        const date=new Date(r.timestamp);
-        const timeStr=`${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
-        const id=r.id||"";
-        const noteHtml=r.note?`<div class="text-sm text-gray-400 mt-1">${r.note}</div>`:"";
+      const currency = (window.elementSdk?.config?.currency_symbol || defaultConfig.currency_symbol);
+
+      container.innerHTML = recent.map(record => {
+        const date = new Date(record.timestamp);
+        const timeStr = `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
+
         return `
-          <div class="swipe-row bg-white shadow-sm" data-id="${id}">
-            <div class="swipe-actions">
-              <button class="tap-highlight swipe-delete-btn w-20 h-10 rounded-xl text-white font-semibold" style="background:#ef4444;" data-id="${id}">刪除</button>
-            </div>
-            <div class="swipe-content rounded-xl p-4">
-              <div class="flex justify-between items-start gap-3">
-                <div class="flex-1">
-                  <div class="font-semibold text-lg mb-1" style="color:#2d3748;">${r.category||""}</div>
-                  <div class="text-sm text-gray-500">${r.payment_method||""} · ${timeStr}</div>
-                  ${noteHtml}
-                </div>
-                <div class="flex flex-col items-end gap-2">
-                  <div class="text-xl font-bold" style="color:#667eea;">${(window.elementSdk?.config?.currency_symbol||defaultConfig.currency_symbol)}${(r.amount||0).toLocaleString()}</div>
-                  <button class="tap-highlight record-menu-btn w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl" data-id="${id}">⋯</button>
+          <div class="bg-white rounded-xl p-4 shadow-sm flex justify-between items-center">
+            <div class="flex-1 pr-3">
+              <div class="flex items-center justify-between gap-2">
+                <div class="font-semibold text-lg mb-1" style="color: #2d3748;">${escapeHtml(record.category || "未分類")}</div>
+                <div class="flex items-center gap-2">
+                  <button class="edit-btn text-sm px-3 py-2 rounded-lg font-semibold" data-id="${escapeHtml(String(record.id))}" style="background:#edf2f7;color:#2d3748;">編輯</button>
+                  <button class="delete-btn text-sm px-3 py-2 rounded-lg font-semibold" data-id="${escapeHtml(String(record.id))}" style="background:#fee2e2;color:#b91c1c;">刪除</button>
                 </div>
               </div>
+              <div class="text-sm text-gray-500">${escapeHtml(record.payment_method || "現金")} · ${escapeHtml(timeStr)}</div>
+              ${record.note ? `<div class="text-sm text-gray-400 mt-1">${escapeHtml(record.note)}</div>` : ``}
             </div>
+            <div class="text-xl font-bold" style="color: #667eea;">${escapeHtml(currency)}${Number(record.amount||0).toLocaleString()}</div>
           </div>
         `;
       }).join("");
 
-      document.querySelectorAll(".record-menu-btn").forEach(btn=>{
-        btn.addEventListener("click",()=>openEditModal(btn.dataset.id));
+      container.querySelectorAll(".edit-btn").forEach(btn => {
+        btn.addEventListener("click", () => openEditModal(btn.dataset.id));
       });
 
-      document.querySelectorAll(".swipe-delete-btn").forEach(btn=>{
-        btn.addEventListener("click",()=>promptDelete(btn.dataset.id));
+      container.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", () => deleteRecord(btn.dataset.id));
       });
-
-      setupSwipeToDelete(container);
     }
 
-    function setupSwipeToDelete(container){
-      let openedRow=null;
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
 
-      const closeOpened=()=>{
-        if(openedRow){
-          openedRow.classList.remove("swipe-revealed");
-          openedRow=null;
+    function showScreen(screenId){
+      const screens = ["main-screen","analysis-screen","settings-screen","step1-screen","step2-screen","step3-screen","step4-screen","payment-redirect-screen","external-payment-screen","payment-success-screen"];
+      screens.forEach(id=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        if(id === screenId){
+          el.classList.remove("hidden");
+          el.classList.add("flex","fade-in");
+        }else{
+          el.classList.add("hidden");
+          el.classList.remove("flex");
         }
-      };
-
-      container.querySelectorAll(".swipe-row").forEach(row=>{
-        let startX=0,startY=0,dragging=false;
-        const threshold=40;
-
-        const onStart=(e)=>{
-          const t=e.touches?e.touches[0]:e;
-          startX=t.clientX;
-          startY=t.clientY;
-          dragging=true;
-        };
-
-        const onMove=(e)=>{
-          if(!dragging) return;
-          const t=e.touches?e.touches[0]:e;
-          const dx=t.clientX-startX;
-          const dy=t.clientY-startY;
-          if(Math.abs(dy)>Math.abs(dx)) return;
-          if(dx<-threshold){
-            if(openedRow && openedRow!==row) closeOpened();
-            row.classList.add("swipe-revealed");
-            openedRow=row;
-          }
-          if(dx>threshold){
-            row.classList.remove("swipe-revealed");
-            if(openedRow===row) openedRow=null;
-          }
-        };
-
-        const onEnd=()=>{
-          dragging=false;
-        };
-
-        row.addEventListener("touchstart",onStart,{passive:true});
-        row.addEventListener("touchmove",onMove,{passive:true});
-        row.addEventListener("touchend",onEnd,{passive:true});
-
-        row.addEventListener("click",(e)=>{
-          const isBtn=e.target.closest("button");
-          if(!isBtn && row.classList.contains("swipe-revealed")){
-            row.classList.remove("swipe-revealed");
-            if(openedRow===row) openedRow=null;
-          }
-        });
       });
+    }
 
-      document.addEventListener("touchstart",(e)=>{
-        const inside=e.target.closest(".swipe-row");
-        if(!inside) closeOpened();
-      },{passive:true});
+    function getCategoryEmoji(category){
+      const map = { "早餐":"🍳","午餐":"🍱","晚餐":"🍽️","交通":"🚗","娛樂":"🎮","購物":"🛍️","其他":"📝" };
+      return map[category] || "💰";
     }
 
     function renderCategoryGrid(){
-      const grid=document.getElementById("category-grid");
-      const all=[...defaultCategories,...customCategories];
-      grid.innerHTML=all.map(c=>`
-        <button class="tap-highlight category-btn p-6 rounded-2xl bg-white shadow-sm text-center font-semibold transition-all hover:shadow-md" data-category="${c}" style="color:#2d3748;">
-          ${getCategoryEmoji(c)}<br><span class="text-sm">${c}</span>
+      const grid = document.getElementById("category-grid");
+      const all = [...defaultCategories, ...customCategories];
+
+      grid.innerHTML = all.map(c => `
+        <button class="category-btn p-6 rounded-2xl bg-white shadow-sm text-center font-semibold transition-all hover:shadow-md" data-category="${escapeHtml(c)}" style="color:#2d3748;">
+          ${escapeHtml(getCategoryEmoji(c))}<br><span class="text-sm">${escapeHtml(c)}</span>
         </button>
       `).join("");
 
       document.querySelectorAll(".category-btn").forEach(btn=>{
-        btn.addEventListener("click",()=>{
-          currentFlow.category=btn.dataset.category;
-          document.getElementById("selected-category-display").textContent=`分類: ${currentFlow.category}`;
-          document.getElementById("selected-category-display2").textContent=`分類: ${currentFlow.category}`;
-          document.getElementById("final-category-display").textContent=currentFlow.category;
-          document.getElementById("external-payment-category").textContent=currentFlow.category;
-          document.getElementById("success-category").textContent=currentFlow.category;
+        btn.addEventListener("click", ()=>{
+          currentFlow.category = btn.dataset.category;
+          document.getElementById("selected-category-display").textContent = `分類: ${currentFlow.category}`;
+          document.getElementById("selected-category-display2").textContent = `分類: ${currentFlow.category}`;
+          document.getElementById("final-category-display").textContent = currentFlow.category;
+          document.getElementById("external-payment-category").textContent = currentFlow.category;
+          document.getElementById("success-category").textContent = currentFlow.category;
           showScreen("step2-screen");
         });
       });
     }
 
-    function getCategoryEmoji(category){
-      const map={早餐:"🍳",午餐:"🍱",晚餐:"🍽️",交通:"🚗",娛樂:"🎮",購物:"🛍️",其他:"📝"};
-      return map[category]||"💰";
-    }
-
-    function initializeAnalysisFilters(){
-      const now=new Date();
-      const firstDay=new Date(now.getFullYear(),now.getMonth(),1);
-      const lastDay=new Date(now.getFullYear(),now.getMonth()+1,0);
-      const fmt=(d)=>{
-        const y=d.getFullYear();
-        const m=String(d.getMonth()+1).padStart(2,"0");
-        const day=String(d.getDate()).padStart(2,"0");
-        return `${y}-${m}-${day}`;
-      };
-
-      document.getElementById("filter-start-date").value=fmt(firstDay);
-      document.getElementById("filter-end-date").value=fmt(lastDay);
-      document.getElementById("filter-min-amount").value="";
-      document.getElementById("filter-max-amount").value="";
-      document.getElementById("filter-category").value="all";
-
-      analysisFilters={startDate:fmt(firstDay),endDate:fmt(lastDay),category:"all",minAmount:null,maxAmount:null};
-      updateCategoryFilter();
-      performAnalysis();
-    }
-
-    function updateCategoryFilter(){
-      const select=document.getElementById("filter-category");
-      const set=new Set();
-      allRecords.forEach(r=>{ if(r.category) set.add(r.category) });
-      select.innerHTML='<option value="all">全部用途</option>';
-      Array.from(set).sort().forEach(c=>{
-        const o=document.createElement("option");
-        o.value=c;o.textContent=c;
-        select.appendChild(o);
-      });
-    }
-
-    function getFilteredRecords(){
-      return allRecords.filter(r=>{
-        const recordDate=new Date(r.timestamp).toISOString().split("T")[0];
-        if(analysisFilters.startDate && recordDate<analysisFilters.startDate) return false;
-        if(analysisFilters.endDate && recordDate>analysisFilters.endDate) return false;
-        if(analysisFilters.category!=="all" && r.category!==analysisFilters.category) return false;
-        if(analysisFilters.minAmount && (r.amount||0)<analysisFilters.minAmount) return false;
-        if(analysisFilters.maxAmount && (r.amount||0)>analysisFilters.maxAmount) return false;
-        return true;
-      });
-    }
-
     function refreshAnalysisIfVisible(){
-      const analysisScreen=document.getElementById("analysis-screen");
+      const analysisScreen = document.getElementById("analysis-screen");
       if(analysisScreen && !analysisScreen.classList.contains("hidden")){
         updateCategoryFilter();
         performAnalysis();
       }
     }
 
-    function performAnalysis(){
-      const filtered=getFilteredRecords();
-      const total=filtered.reduce((sum,r)=>sum+(r.amount||0),0);
-      const count=filtered.length;
-      const average=count>0?Math.round(total/count):0;
-      const max=count>0?Math.max(...filtered.map(r=>r.amount||0)):0;
+    function initializeAnalysisFilters(){
+      const now = new Date();
+      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+      const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0);
 
-      document.getElementById("analysis-total").textContent=total.toLocaleString();
-      document.getElementById("analysis-count").textContent=count;
-      document.getElementById("analysis-average").textContent=average.toLocaleString();
-      document.getElementById("analysis-max").textContent=max.toLocaleString();
+      const formatDate = (date)=>{
+        const y=date.getFullYear();
+        const m=String(date.getMonth()+1).padStart(2,"0");
+        const d=String(date.getDate()).padStart(2,"0");
+        return `${y}-${m}-${d}`;
+      };
 
-      const categoryStats={};
-      filtered.forEach(r=>{
-        categoryStats[r.category]=(categoryStats[r.category]||0)+(r.amount||0);
+      document.getElementById("filter-start-date").value = formatDate(firstDay);
+      document.getElementById("filter-end-date").value = formatDate(lastDay);
+      document.getElementById("filter-min-amount").value = "";
+      document.getElementById("filter-max-amount").value = "";
+      document.getElementById("filter-category").value = "all";
+
+      analysisFilters = {
+        startDate: formatDate(firstDay),
+        endDate: formatDate(lastDay),
+        category: "all",
+        minAmount: null,
+        maxAmount: null
+      };
+
+      updateCategoryFilter();
+      performAnalysis();
+    }
+
+    function updateCategoryFilter(){
+      const select = document.getElementById("filter-category");
+      const categories = new Set();
+      allRecords.forEach(r => { if(r.category) categories.add(r.category); });
+
+      select.innerHTML = '<option value="all">全部用途</option>';
+      Array.from(categories).sort().forEach(category=>{
+        const opt = document.createElement("option");
+        opt.value = category;
+        opt.textContent = category;
+        select.appendChild(opt);
       });
-      const sortedCats=Object.entries(categoryStats).sort((a,b)=>b[1]-a[1]);
-      const categoryContainer=document.getElementById("category-distribution");
-      if(sortedCats.length===0){
-        categoryContainer.innerHTML='<p class="text-gray-500 text-center py-2">無資料</p>';
+    }
+
+    function getFilteredRecords(){
+      return allRecords.filter(record=>{
+        const recordDate = new Date(record.timestamp).toISOString().split("T")[0];
+
+        if(analysisFilters.startDate && recordDate < analysisFilters.startDate) return false;
+        if(analysisFilters.endDate && recordDate > analysisFilters.endDate) return false;
+
+        if(analysisFilters.category !== "all" && record.category !== analysisFilters.category) return false;
+
+        if(analysisFilters.minAmount != null && Number(record.amount) < Number(analysisFilters.minAmount)) return false;
+        if(analysisFilters.maxAmount != null && Number(record.amount) > Number(analysisFilters.maxAmount)) return false;
+
+        return true;
+      });
+    }
+
+    function performAnalysis(){
+      const filtered = getFilteredRecords();
+      const total = filtered.reduce((sum,r)=>sum + (Number(r.amount)||0), 0);
+      const count = filtered.length;
+      const average = count ? Math.round(total / count) : 0;
+      const max = count ? Math.max(...filtered.map(r=>Number(r.amount)||0)) : 0;
+
+      document.getElementById("analysis-total").textContent = total.toLocaleString();
+      document.getElementById("analysis-count").textContent = count;
+      document.getElementById("analysis-average").textContent = average.toLocaleString();
+      document.getElementById("analysis-max").textContent = max.toLocaleString();
+
+      const categoryStats = {};
+      filtered.forEach(r=>{
+        const c = r.category || "未分類";
+        categoryStats[c] = (categoryStats[c]||0) + (Number(r.amount)||0);
+      });
+
+      const sortedCategories = Object.entries(categoryStats).sort((a,b)=>b[1]-a[1]);
+      const categoryContainer = document.getElementById("category-distribution");
+      const currency = (window.elementSdk?.config?.currency_symbol || defaultConfig.currency_symbol);
+
+      if(sortedCategories.length === 0){
+        categoryContainer.innerHTML = '<p class="text-gray-500 text-center py-2">無資料</p>';
       }else{
-        const maxCat=Math.max(...sortedCats.map(x=>x[1]));
-        categoryContainer.innerHTML=sortedCats.map(([category,amount])=>{
-          const pct=(amount/maxCat)*100;
-          const proportion=total>0?((amount/total)*100).toFixed(1):"0.0";
+        const maxCategoryAmount = Math.max(...sortedCategories.map(x=>x[1]));
+        categoryContainer.innerHTML = sortedCategories.map(([category, amount])=>{
+          const percentage = maxCategoryAmount ? (amount/maxCategoryAmount)*100 : 0;
+          const proportion = total ? ((amount/total)*100).toFixed(1) : "0.0";
           return `
             <div>
               <div class="flex justify-between mb-1 text-sm">
-                <span class="font-semibold" style="color:#2d3748;">${category}</span>
-                <span class="text-gray-600">${(window.elementSdk?.config?.currency_symbol||defaultConfig.currency_symbol)}${amount.toLocaleString()} (${proportion}%)</span>
+                <span class="font-semibold" style="color:#2d3748;">${escapeHtml(category)}</span>
+                <span class="text-gray-600">${escapeHtml(currency)}${Number(amount).toLocaleString()} (${escapeHtml(proportion)}%)</span>
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="h-2 rounded-full" style="width:${pct}%;background:#667eea;"></div>
+                <div class="h-2 rounded-full" style="width:${percentage}%;background:#667eea;"></div>
               </div>
             </div>
           `;
         }).join("");
       }
 
-      const paymentStats={};
+      const paymentStats = {};
       filtered.forEach(r=>{
-        const m=r.payment_method||"";
-        if(!paymentStats[m]) paymentStats[m]={count:0,amount:0};
-        paymentStats[m].count++;
-        paymentStats[m].amount+=(r.amount||0);
+        const pm = r.payment_method || "現金";
+        if(!paymentStats[pm]) paymentStats[pm] = { count:0, amount:0 };
+        paymentStats[pm].count++;
+        paymentStats[pm].amount += (Number(r.amount)||0);
       });
-      const sortedPay=Object.entries(paymentStats).sort((a,b)=>b[1].amount-a[1].amount);
-      const paymentContainer=document.getElementById("payment-distribution");
-      if(sortedPay.length===0){
-        paymentContainer.innerHTML='<p class="text-gray-500 text-center py-2">無資料</p>';
+
+      const sortedPayments = Object.entries(paymentStats).sort((a,b)=>b[1].amount-a[1].amount);
+      const paymentContainer = document.getElementById("payment-distribution");
+
+      if(sortedPayments.length === 0){
+        paymentContainer.innerHTML = '<p class="text-gray-500 text-center py-2">無資料</p>';
       }else{
-        paymentContainer.innerHTML=sortedPay.map(([method,stats])=>{
-          const proportion=total>0?((stats.amount/total)*100).toFixed(1):"0.0";
+        paymentContainer.innerHTML = sortedPayments.map(([method, stats])=>{
+          const proportion = total ? ((stats.amount/total)*100).toFixed(1) : "0.0";
           return `
             <div class="flex justify-between items-center py-2 border-b border-gray-100">
               <div>
-                <p class="font-semibold" style="color:#2d3748;">${method}</p>
+                <p class="font-semibold" style="color:#2d3748;">${escapeHtml(method)}</p>
                 <p class="text-xs text-gray-500">${stats.count} 筆交易</p>
               </div>
               <div class="text-right">
-                <p class="font-bold" style="color:#667eea;">${(window.elementSdk?.config?.currency_symbol||defaultConfig.currency_symbol)}${stats.amount.toLocaleString()}</p>
-                <p class="text-xs text-gray-500">${proportion}%</p>
+                <p class="font-bold" style="color:#667eea;">${escapeHtml(currency)}${Number(stats.amount).toLocaleString()}</p>
+                <p class="text-xs text-gray-500">${escapeHtml(proportion)}%</p>
               </div>
             </div>
           `;
         }).join("");
       }
 
-      const recordsContainer=document.getElementById("analysis-records");
-      if(filtered.length===0){
-        recordsContainer.innerHTML='<p class="text-gray-500 text-center py-4">無符合條件的記錄</p>';
+      const recordsContainer = document.getElementById("analysis-records");
+      if(filtered.length === 0){
+        recordsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">無符合條件的記錄</p>';
       }else{
-        recordsContainer.innerHTML=filtered.slice(0,20).map(r=>{
-          const date=new Date(r.timestamp);
-          const dateStr=`${date.getMonth()+1}/${date.getDate()}`;
-          const timeStr=`${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
-          const id=r.id||"";
+        recordsContainer.innerHTML = filtered.slice(0,20).map(record=>{
+          const date = new Date(record.timestamp);
+          const dateStr = `${date.getMonth()+1}/${date.getDate()}`;
+          const timeStr = `${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
           return `
-            <div class="flex justify-between items-start py-3 border-b border-gray-100 gap-3">
+            <div class="flex justify-between items-center py-3 border-b border-gray-100">
               <div class="flex-1">
                 <div class="flex items-center gap-2 mb-1">
-                  <span class="font-semibold" style="color:#2d3748;">${r.category}</span>
-                  <span class="text-xs px-2 py-1 rounded" style="background:#f0f0f0;color:#666;">${r.payment_method}</span>
+                  <span class="font-semibold" style="color:#2d3748;">${escapeHtml(record.category || "未分類")}</span>
+                  <span class="text-xs px-2 py-1 rounded" style="background:#f0f0f0;color:#666;">${escapeHtml(record.payment_method || "現金")}</span>
                 </div>
-                <p class="text-xs text-gray-500">${dateStr} ${timeStr}</p>
-                ${r.note?`<p class="text-xs text-gray-400 mt-1">${r.note}</p>`:""}
+                <p class="text-xs text-gray-500">${escapeHtml(dateStr)} ${escapeHtml(timeStr)}</p>
+                ${record.note ? `<p class="text-xs text-gray-400 mt-1">${escapeHtml(record.note)}</p>` : ``}
               </div>
-              <div class="flex flex-col items-end gap-2">
-                <div class="text-lg font-bold" style="color:#667eea;">${(window.elementSdk?.config?.currency_symbol||defaultConfig.currency_symbol)}${(r.amount||0).toLocaleString()}</div>
-                <button class="tap-highlight analysis-record-menu-btn w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl" data-id="${id}">⋯</button>
-              </div>
+              <div class="text-lg font-bold" style="color:#667eea;">${escapeHtml(currency)}${Number(record.amount||0).toLocaleString()}</div>
             </div>
           `;
         }).join("");
-
-        if(filtered.length>20){
-          recordsContainer.innerHTML+='<p class="text-gray-500 text-center py-3 text-sm">僅顯示前 20 筆記錄</p>';
+        if(filtered.length > 20){
+          recordsContainer.innerHTML += '<p class="text-gray-500 text-center py-3 text-sm">僅顯示前 20 筆記錄</p>';
         }
-
-        document.querySelectorAll(".analysis-record-menu-btn").forEach(btn=>{
-          btn.addEventListener("click",()=>openEditModal(btn.dataset.id));
-        });
-      }
-    }
-
-    function getRecordById(id){
-      return allRecords.find(r=>String(r.id)===String(id))||null;
-    }
-
-    function buildEditCategoryOptions(selected){
-      const select=document.getElementById("edit-category");
-      const set=new Set([...defaultCategories,...customCategories]);
-      allRecords.forEach(r=>{ if(r.category) set.add(r.category) });
-      select.innerHTML="";
-      Array.from(set).filter(Boolean).sort().forEach(c=>{
-        const o=document.createElement("option");
-        o.value=c;o.textContent=c;
-        select.appendChild(o);
-      });
-      if(selected && Array.from(select.options).some(o=>o.value===selected)){
-        select.value=selected;
       }
     }
 
     function openEditModal(id){
-      const record=getRecordById(id);
-      if(!record){
-        showErrorMessage("找不到這筆記錄");
-        return;
-      }
-      editingRecordId=id;
+      const r = allRecords.find(x => String(x.id) === String(id));
+      if(!r){ showErrorMessage("找不到該筆記錄"); return; }
 
-      buildEditCategoryOptions(record.category);
-      document.getElementById("edit-payment-method").value=record.payment_method||"現金";
-      document.getElementById("edit-amount").value=record.amount||0;
-      document.getElementById("edit-note").value=record.note||"";
-      document.getElementById("edit-datetime").value=toLocalDateTimeInputValue(record.timestamp);
+      editingRecordId = String(id);
+
+      const select = document.getElementById("edit-category");
+      const categories = Array.from(new Set([...defaultCategories, ...customCategories, ...(allRecords.map(x=>x.category).filter(Boolean))]));
+      select.innerHTML = categories.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+      select.value = r.category || "其他";
+
+      document.getElementById("edit-payment").value = r.payment_method || "現金";
+      document.getElementById("edit-amount").value = Number(r.amount || 0);
+      document.getElementById("edit-note").value = r.note || "";
+
+      const d = new Date(r.timestamp);
+      const meta = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+      document.getElementById("edit-meta").textContent = `建立時間：${meta}`;
 
       document.getElementById("edit-modal").classList.remove("hidden");
+      document.getElementById("edit-modal").classList.add("flex");
     }
 
     function closeEditModal(){
-      editingRecordId=null;
-      document.getElementById("edit-modal").classList.add("hidden");
+      editingRecordId = null;
+      const modal = document.getElementById("edit-modal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
     }
 
-    function promptDelete(id){
-      editingRecordId=id;
-      document.getElementById("confirm-delete-modal").classList.remove("hidden");
-    }
+    async function deleteRecord(id){
+      const r = allRecords.find(x => String(x.id) === String(id));
+      if(!r){ showErrorMessage("找不到該筆記錄"); return; }
 
-    function closeDeleteConfirm(){
-      document.getElementById("confirm-delete-modal").classList.add("hidden");
-    }
+      const ok = confirm("確定要刪除此筆記錄嗎？");
+      if(!ok) return;
 
-    document.getElementById("close-edit-modal").addEventListener("click",closeEditModal);
-    document.getElementById("edit-modal-backdrop").addEventListener("click",closeEditModal);
+      const updated = { ...r, is_deleted: true, timestamp: r.timestamp };
+      const res = await safeUpdateExpense(updated);
 
-    document.getElementById("delete-record-btn").addEventListener("click",()=>{
-      if(!editingRecordId) return;
-      document.getElementById("confirm-delete-modal").classList.remove("hidden");
-    });
+      allRecords = allRecords.filter(x => String(x.id) !== String(id));
+      updateUI();
+      refreshAnalysisIfVisible();
 
-    document.getElementById("cancel-delete-confirm-btn").addEventListener("click",closeDeleteConfirm);
-
-    document.getElementById("confirm-delete-btn").addEventListener("click",async()=>{
-      const id=editingRecordId;
-      if(!id) return;
-      const record=getRecordById(id);
-      if(!record){
-        closeDeleteConfirm();
-        closeEditModal();
-        showErrorMessage("找不到這筆記錄");
-        return;
-      }
-      const updated={...record,is_deleted:true};
-      const res=await window.dataSdk.update(updated);
-      closeDeleteConfirm();
-      closeEditModal();
-      if(res?.isOk){
+      if(res.ok){
         showSuccessMessage("✓ 已刪除");
-        refreshAnalysisIfVisible();
       }else{
-        showErrorMessage("刪除失敗");
+        showErrorMessage(`⚠️ 已改用離線刪除（${res.reason || "fallback"}）`);
       }
+    }
+
+    document.getElementById("close-edit-modal").addEventListener("click", closeEditModal);
+    document.getElementById("edit-modal").addEventListener("click", (e)=>{
+      if(e.target && e.target.id === "edit-modal") closeEditModal();
     });
 
-    document.getElementById("save-edit-btn").addEventListener("click",async()=>{
-      const id=editingRecordId;
-      if(!id) return;
-      const record=getRecordById(id);
-      if(!record){
-        showErrorMessage("找不到這筆記錄");
-        return;
-      }
+    document.getElementById("save-edit-btn").addEventListener("click", async ()=>{
+      if(!editingRecordId) return;
+      const r = allRecords.find(x => String(x.id) === String(editingRecordId));
+      if(!r){ showErrorMessage("找不到該筆記錄"); closeEditModal(); return; }
 
-      const category=document.getElementById("edit-category").value.trim();
-      const payment_method=document.getElementById("edit-payment-method").value;
-      const amount=parseFloat(document.getElementById("edit-amount").value);
-      const note=document.getElementById("edit-note").value.trim();
-      const dtLocal=document.getElementById("edit-datetime").value;
+      const category = document.getElementById("edit-category").value;
+      const payment = document.getElementById("edit-payment").value;
+      const amount = parseFloat(document.getElementById("edit-amount").value);
+      const note = document.getElementById("edit-note").value.trim();
 
-      if(!category){
-        showErrorMessage("請選擇用途");
-        return;
-      }
-      if(!amount || amount<=0){
-        showErrorMessage("請輸入有效金額");
-        return;
-      }
-      if(!dtLocal){
-        showErrorMessage("請選擇日期時間");
-        return;
-      }
+      if(!amount || amount <= 0){ showErrorMessage("請輸入有效金額"); return; }
 
-      const ts=new Date(dtLocal);
-      if(Number.isNaN(ts.getTime())){
-        showErrorMessage("日期時間格式不正確");
-        return;
-      }
-
-      const updated={
-        ...record,
+      const updated = {
+        ...r,
         category,
-        payment_method,
+        payment_method: payment,
         amount,
         note,
-        timestamp:ts.toISOString()
+        is_deleted: false
       };
 
-      const btn=document.getElementById("save-edit-btn");
-      btn.disabled=true;
-      btn.textContent="儲存中...";
+      const res = await safeUpdateExpense(updated);
 
-      const res=await window.dataSdk.update(updated);
+      const idx = allRecords.findIndex(x => String(x.id) === String(editingRecordId));
+      if(idx >= 0) allRecords[idx] = updated;
+      allRecords.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+      updateUI();
+      refreshAnalysisIfVisible();
+      closeEditModal();
 
-      btn.disabled=false;
-      btn.textContent="儲存";
-
-      if(res?.isOk){
-        closeEditModal();
-        showSuccessMessage("✓ 已更新記錄");
-        refreshAnalysisIfVisible();
+      if(res.ok){
+        showSuccessMessage("✓ 已更新");
       }else{
-        showErrorMessage("更新失敗");
+        showErrorMessage(`⚠️ 已改用離線更新（${res.reason || "fallback"}）`);
       }
     });
 
-    document.getElementById("apply-filter-btn").addEventListener("click",()=>{
-      analysisFilters={
-        startDate:document.getElementById("filter-start-date").value||null,
-        endDate:document.getElementById("filter-end-date").value||null,
-        category:document.getElementById("filter-category").value,
-        minAmount:parseFloat(document.getElementById("filter-min-amount").value)||null,
-        maxAmount:parseFloat(document.getElementById("filter-max-amount").value)||null
+    document.getElementById("delete-record-btn").addEventListener("click", async ()=>{
+      if(!editingRecordId) return;
+      await deleteRecord(editingRecordId);
+      closeEditModal();
+    });
+
+    document.getElementById("apply-filter-btn").addEventListener("click", ()=>{
+      analysisFilters = {
+        startDate: document.getElementById("filter-start-date").value || null,
+        endDate: document.getElementById("filter-end-date").value || null,
+        category: document.getElementById("filter-category").value,
+        minAmount: parseFloat(document.getElementById("filter-min-amount").value) || null,
+        maxAmount: parseFloat(document.getElementById("filter-max-amount").value) || null
       };
       performAnalysis();
       showSuccessMessage("✓ 篩選已套用");
     });
 
-    document.getElementById("reset-filter-btn").addEventListener("click",()=>{
+    document.getElementById("reset-filter-btn").addEventListener("click", ()=>{
       initializeAnalysisFilters();
       showSuccessMessage("✓ 已重置為當月資料");
     });
 
-    document.getElementById("settings-btn").addEventListener("click",()=>showScreen("settings-screen"));
-    document.getElementById("analysis-btn").addEventListener("click",()=>{
+    document.getElementById("settings-btn").addEventListener("click", ()=>showScreen("settings-screen"));
+    document.getElementById("analysis-btn").addEventListener("click", ()=>{
       initializeAnalysisFilters();
       showScreen("analysis-screen");
     });
-    document.getElementById("back-from-analysis").addEventListener("click",()=>showScreen("main-screen"));
-    document.getElementById("back-from-settings").addEventListener("click",()=>showScreen("main-screen"));
+    document.getElementById("back-from-analysis").addEventListener("click", ()=>showScreen("main-screen"));
+    document.getElementById("back-from-settings").addEventListener("click", ()=>showScreen("main-screen"));
 
-    document.getElementById("carrier-number-input").addEventListener("input",(e)=>{
-      const v=e.target.value;
-      if(v.length>0){
+    document.getElementById("carrier-number-input").addEventListener("input", (e)=>{
+      const value = e.target.value;
+      if(value.length > 0){
         document.getElementById("carrier-preview").classList.remove("hidden");
-        document.getElementById("carrier-preview-text").textContent=v;
+        document.getElementById("carrier-preview-text").textContent = value;
       }else{
         document.getElementById("carrier-preview").classList.add("hidden");
       }
     });
 
-    document.getElementById("save-carrier-btn").addEventListener("click",async()=>{
-      const carrierNumber=document.getElementById("carrier-number-input").value.trim();
-      if(!carrierNumber){showErrorMessage("請輸入載具號碼");return}
-      if(!carrierNumber.startsWith("/")){showErrorMessage("載具號碼必須以 / 開頭");return}
+    document.getElementById("save-carrier-btn").addEventListener("click", async ()=>{
+      const carrierNumber = document.getElementById("carrier-number-input").value.trim();
+      if(!carrierNumber){ showErrorMessage("請輸入載具號碼"); return; }
+      if(!carrierNumber.startsWith("/")){ showErrorMessage("載具號碼必須以 / 開頭"); return; }
 
-      const saveBtn=document.getElementById("save-carrier-btn");
-      const text=document.getElementById("save-carrier-text");
-      saveBtn.disabled=true;
-      text.textContent="儲存中...";
+      const saveBtn = document.getElementById("save-carrier-btn");
+      const btnText = document.getElementById("save-carrier-text");
+      saveBtn.disabled = true;
+      btnText.textContent = "儲存中...";
 
-      if(carrierSettings){
-        const updated={...carrierSettings,carrier_number:carrierNumber};
-        const res=await window.dataSdk.update(updated);
-        if(res?.isOk){showSuccessMessage("✓ 載具設定已更新")}else{showErrorMessage("更新失敗，請重試")}
-      }else{
-        const newSettings={
-          id:"carrier-settings",
-          carrier_number:carrierNumber,
-          is_settings:true,
-          is_deleted:false,
-          category:"",
-          amount:0,
-          payment_method:"",
-          carrier_used:false,
-          timestamp:new Date().toISOString(),
-          note:""
-        };
-        const res=await window.dataSdk.create(newSettings);
-        if(res?.isOk){showSuccessMessage("✓ 載具設定已儲存")}else{showErrorMessage("儲存失敗，請重試")}
+      try{
+        if(carrierSettings){
+          const updated = { ...carrierSettings, carrier_number: carrierNumber };
+          const res = (window.dataSdk && window.dataSdk.update) ? await withTimeout(window.dataSdk.update(updated), 2500) : null;
+          carrierSettings = updated;
+          updateCarrierDisplay();
+          if(res && res.isOk){
+            showSuccessMessage("✓ 載具設定已更新");
+          }else{
+            showErrorMessage("⚠️ 已在本機套用（雲端更新可能失敗）");
+          }
+        }else{
+          const newSettings = {
+            id: "carrier-settings",
+            carrier_number: carrierNumber,
+            is_settings: true,
+            category: "",
+            amount: 0,
+            payment_method: "",
+            carrier_used: false,
+            timestamp: new Date().toISOString(),
+            note: ""
+          };
+          const res = (window.dataSdk && window.dataSdk.create) ? await withTimeout(window.dataSdk.create(newSettings), 2500) : null;
+          carrierSettings = newSettings;
+          updateCarrierDisplay();
+          if(res && res.isOk){
+            showSuccessMessage("✓ 載具設定已儲存");
+          }else{
+            showErrorMessage("⚠️ 已在本機套用（雲端儲存可能失敗）");
+          }
+        }
+      }catch(e){
+        carrierSettings = carrierSettings || { id:"carrier-settings", carrier_number: carrierNumber, is_settings:true };
+        updateCarrierDisplay();
+        showErrorMessage("⚠️ 已在本機套用（雲端儲存失敗或逾時）");
       }
 
-      saveBtn.disabled=false;
-      text.textContent="儲存載具設定";
+      saveBtn.disabled = false;
+      btnText.textContent = "儲存載具設定";
     });
 
-    document.getElementById("quick-expense-btn").addEventListener("click",()=>{
-      currentFlow={category:"",paymentMethod:"",paymentColor:"",paymentEmoji:"",carrierUsed:false,pendingAmount:0};
+    document.getElementById("quick-expense-btn").addEventListener("click", ()=>{
+      currentFlow = { category:"", paymentMethod:"", paymentColor:"", paymentEmoji:"", carrierUsed:false, pendingAmount:0 };
       renderCategoryGrid();
       showScreen("step1-screen");
     });
 
-    document.getElementById("back-from-step1").addEventListener("click",()=>showScreen("main-screen"));
-    document.getElementById("back-from-step2").addEventListener("click",()=>showScreen("step1-screen"));
-    document.getElementById("back-from-step3").addEventListener("click",()=>showScreen("step2-screen"));
-    document.getElementById("back-from-step4").addEventListener("click",()=>showScreen("step3-screen"));
+    document.getElementById("back-from-step1").addEventListener("click", ()=>showScreen("main-screen"));
+    document.getElementById("back-from-step2").addEventListener("click", ()=>showScreen("step1-screen"));
+    document.getElementById("back-from-step3").addEventListener("click", ()=>showScreen("step2-screen"));
+    document.getElementById("back-from-step4").addEventListener("click", ()=>showScreen("step3-screen"));
 
-    document.getElementById("add-category-btn").addEventListener("click",()=>{
+    document.getElementById("add-category-btn").addEventListener("click", ()=>{
       document.getElementById("add-category-form").classList.remove("hidden");
       document.getElementById("new-category-input").focus();
     });
 
-    document.getElementById("cancel-category-btn").addEventListener("click",()=>{
+    document.getElementById("cancel-category-btn").addEventListener("click", ()=>{
       document.getElementById("add-category-form").classList.add("hidden");
-      document.getElementById("new-category-input").value="";
+      document.getElementById("new-category-input").value = "";
     });
 
-    document.getElementById("save-category-btn").addEventListener("click",()=>{
-      const newCategory=document.getElementById("new-category-input").value.trim();
+    document.getElementById("save-category-btn").addEventListener("click", ()=>{
+      const newCategory = document.getElementById("new-category-input").value.trim();
       if(newCategory && !customCategories.includes(newCategory) && !defaultCategories.includes(newCategory)){
         customCategories.push(newCategory);
         renderCategoryGrid();
       }
       document.getElementById("add-category-form").classList.add("hidden");
-      document.getElementById("new-category-input").value="";
+      document.getElementById("new-category-input").value = "";
     });
 
-    document.getElementById("skip-carrier-btn").addEventListener("click",()=>{
-      currentFlow.carrierUsed=false;
+    document.getElementById("skip-carrier-btn").addEventListener("click", ()=>{
+      currentFlow.carrierUsed = false;
       showScreen("step3-screen");
     });
 
-    document.getElementById("continue-to-payment-btn").addEventListener("click",()=>{
-      currentFlow.carrierUsed=true;
+    document.getElementById("continue-to-payment-btn").addEventListener("click", ()=>{
+      currentFlow.carrierUsed = true;
       showScreen("step3-screen");
     });
 
-    const iosDeepLinks={
-      "LINE Pay":"line://pay/generateQR",
-      "Taiwan Pay":"twmpshortcut://?type=payment",
-      "全支付":"com.pxpay.plus://zjdja",
-      "街口支付":"jkos://showQRCode",
-      "悠遊付":"tw.com.easycard.easycardwallet://paymentCode"
-    };
+    function bindPaymentButtons(){
+      document.querySelectorAll(".payment-method-btn").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          currentFlow.paymentMethod = btn.dataset.method;
+          currentFlow.paymentColor = btn.dataset.color;
+          currentFlow.paymentEmoji = btn.dataset.emoji;
+          document.getElementById("final-payment-display").textContent = currentFlow.paymentMethod;
 
-    let pendingDeepLink=null;
-
-    document.getElementById("manual-open-deeplink-btn").addEventListener("click",()=>{
-      if(pendingDeepLink){window.location.href=pendingDeepLink}
-    });
-
-    document.getElementById("back-from-redirect").addEventListener("click",()=>showScreen("step3-screen"));
-
-    document.querySelectorAll(".payment-method-btn").forEach(btn=>{
-      btn.addEventListener("click",()=>{
-        currentFlow.paymentMethod=btn.dataset.method;
-        currentFlow.paymentColor=btn.dataset.color;
-        currentFlow.paymentEmoji=btn.dataset.emoji;
-        document.getElementById("final-payment-display").textContent=currentFlow.paymentMethod;
-
-        if(currentFlow.paymentMethod==="現金"){
-          showScreen("step4-screen");
-          return;
-        }
-
-        const deeplink=iosDeepLinks[currentFlow.paymentMethod]||"";
-        pendingDeepLink=deeplink;
-
-        document.getElementById("redirect-payment-name").textContent=currentFlow.paymentMethod;
-        document.getElementById("redirect-payment-icon").textContent=currentFlow.paymentEmoji;
-        document.getElementById("redirect-payment-icon").style.background=currentFlow.paymentColor;
-        document.getElementById("pulse-ring").style.background=currentFlow.paymentColor+"40";
-        document.getElementById("deep-link-url").textContent=deeplink||"";
-
-        showScreen("payment-redirect-screen");
-
-        setTimeout(()=>{
-          if(deeplink){
-            try{window.location.href=deeplink}catch(e){}
+          if(currentFlow.paymentMethod === "現金"){
+            showScreen("step4-screen");
+            return;
           }
-        },350);
 
-        setTimeout(()=>{
-          document.getElementById("external-app-title").textContent=currentFlow.paymentMethod;
-          document.getElementById("external-payment-header").style.background=currentFlow.paymentColor;
-          document.getElementById("external-icon").textContent=currentFlow.paymentEmoji;
-          document.getElementById("external-icon").style.background=currentFlow.paymentColor+"20";
-          document.getElementById("confirm-external-payment-btn").style.background=currentFlow.paymentColor;
-          document.getElementById("external-amount-input").value="";
-          showScreen("external-payment-screen");
-        },1400);
+          document.getElementById("redirect-payment-name").textContent = currentFlow.paymentMethod;
+          document.getElementById("redirect-payment-icon").textContent = currentFlow.paymentEmoji;
+          document.getElementById("redirect-payment-icon").style.background = currentFlow.paymentColor;
+          document.getElementById("pulse-ring").style.background = currentFlow.paymentColor + "40";
+
+          const deeplink = iosDeepLinks[currentFlow.paymentMethod] || "app://payment";
+          document.getElementById("deep-link-url").textContent = deeplink;
+
+          showScreen("payment-redirect-screen");
+
+          setTimeout(()=>{
+            try{
+              window.location.href = deeplink;
+            }catch(e){}
+          }, 350);
+
+          setTimeout(()=>{
+            document.getElementById("external-app-title").textContent = currentFlow.paymentMethod;
+            document.getElementById("external-payment-header").style.background = currentFlow.paymentColor;
+            document.getElementById("external-icon").textContent = currentFlow.paymentEmoji;
+            document.getElementById("external-icon").style.background = currentFlow.paymentColor + "20";
+            document.getElementById("confirm-external-payment-btn").style.background = currentFlow.paymentColor;
+            document.getElementById("external-amount-input").value = "";
+            document.getElementById("remaining-balance").textContent = "NT$ 8,520";
+            showScreen("external-payment-screen");
+          }, 1200);
+        });
       });
+    }
+
+    bindPaymentButtons();
+
+    document.getElementById("manual-open-app-btn").addEventListener("click", ()=>{
+      const url = document.getElementById("deep-link-url").textContent.trim();
+      if(url){
+        try{ window.location.href = url; }catch(e){}
+      }
     });
 
-    document.getElementById("external-amount-input").addEventListener("input",(e)=>{
-      const amount=parseFloat(e.target.value)||0;
-      const remaining=8520-amount;
-      document.getElementById("remaining-balance").textContent=`NT$ ${remaining.toLocaleString()}`;
+    document.getElementById("external-amount-input").addEventListener("input", (e)=>{
+      const amount = parseFloat(e.target.value) || 0;
+      const remaining = 8520 - amount;
+      document.getElementById("remaining-balance").textContent = `NT$ ${remaining.toLocaleString()}`;
     });
 
-    document.getElementById("cancel-external-payment-btn").addEventListener("click",()=>showScreen("step3-screen"));
+    document.getElementById("cancel-external-payment-btn").addEventListener("click", ()=>showScreen("step3-screen"));
 
-    document.getElementById("confirm-external-payment-btn").addEventListener("click",async()=>{
-      const amount=parseFloat(document.getElementById("external-amount-input").value);
-      if(!amount||amount<=0){showErrorMessage("請輸入有效金額");return}
+    document.getElementById("confirm-external-payment-btn").addEventListener("click", async ()=>{
+      const amount = parseFloat(document.getElementById("external-amount-input").value);
+      if(!amount || amount <= 0){ showErrorMessage("請輸入有效金額"); return; }
 
-      currentFlow.pendingAmount=amount;
+      currentFlow.pendingAmount = amount;
 
-      const confirmBtn=document.getElementById("confirm-external-payment-btn");
-      const btnText=document.getElementById("confirm-btn-text");
-      confirmBtn.disabled=true;
-      btnText.textContent="處理中...";
+      const confirmBtn = document.getElementById("confirm-external-payment-btn");
+      const btnText = document.getElementById("confirm-btn-text");
+      confirmBtn.disabled = true;
+      btnText.textContent = "處理中...";
 
       setTimeout(()=>{
-        document.getElementById("success-amount").textContent=amount.toLocaleString();
+        document.getElementById("success-amount").textContent = amount.toLocaleString();
         showScreen("payment-success-screen");
 
-        setTimeout(async()=>{
-          const record={
-            id:Date.now().toString(),
-            category:currentFlow.category,
-            amount:currentFlow.pendingAmount,
-            payment_method:currentFlow.paymentMethod,
-            carrier_used:currentFlow.carrierUsed,
-            timestamp:new Date().toISOString(),
-            note:`透過 ${currentFlow.paymentMethod} 付款`,
-            carrier_number:"",
-            is_settings:false,
-            is_deleted:false
+        setTimeout(async ()=>{
+          const record = {
+            id: Date.now().toString(),
+            category: currentFlow.category,
+            amount: currentFlow.pendingAmount,
+            payment_method: currentFlow.paymentMethod,
+            carrier_used: currentFlow.carrierUsed,
+            timestamp: new Date().toISOString(),
+            note: `透過 ${currentFlow.paymentMethod} 付款`,
+            carrier_number: "",
+            is_settings: false,
+            is_deleted: false
           };
 
-          const res=await window.dataSdk.create(record);
-          showScreen("main-screen");
-          if(res?.isOk){showSuccessMessage("✓ 付款成功！記錄已自動儲存")}else{showErrorMessage("儲存失敗，請重試")}
+          const result = await safeCreateExpense(record);
 
-          confirmBtn.disabled=false;
-          btnText.textContent="確認付款";
-        },1200);
-      },800);
+          showScreen("main-screen");
+
+          if(result.ok){
+            showSuccessMessage("✓ 付款成功！記錄已自動儲存");
+          }else{
+            showErrorMessage(`⚠️ 已改用離線儲存（${result.reason || "fallback"}）`);
+            mergeLocalStorageIntoUI();
+          }
+
+          confirmBtn.disabled = false;
+          btnText.textContent = "確認付款";
+        }, 1200);
+      }, 700);
     });
 
-    document.getElementById("save-expense-btn").addEventListener("click",async()=>{
-      const amount=parseFloat(document.getElementById("amount-input").value);
-      const note=document.getElementById("note-input").value.trim();
-      if(!amount||amount<=0){showErrorMessage("請輸入有效金額");return}
+    document.getElementById("save-expense-btn").addEventListener("click", async ()=>{
+      const amount = parseFloat(document.getElementById("amount-input").value);
+      const note = document.getElementById("note-input").value.trim();
 
-      const saveBtn=document.getElementById("save-expense-btn");
-      const btnText=document.getElementById("save-btn-text");
-      saveBtn.disabled=true;
-      btnText.textContent="儲存中...";
+      if(!amount || amount <= 0){ showErrorMessage("請輸入有效金額"); return; }
 
-      const record={
-        id:Date.now().toString(),
-        category:currentFlow.category,
-        amount:amount,
-        payment_method:currentFlow.paymentMethod,
-        carrier_used:currentFlow.carrierUsed,
-        timestamp:new Date().toISOString(),
-        note:note,
-        carrier_number:"",
-        is_settings:false,
-        is_deleted:false
+      const saveBtn = document.getElementById("save-expense-btn");
+      const btnText = document.getElementById("save-btn-text");
+      saveBtn.disabled = true;
+      btnText.textContent = "儲存中...";
+
+      const record = {
+        id: Date.now().toString(),
+        category: currentFlow.category,
+        amount: amount,
+        payment_method: currentFlow.paymentMethod || "現金",
+        carrier_used: currentFlow.carrierUsed,
+        timestamp: new Date().toISOString(),
+        note: note,
+        carrier_number: "",
+        is_settings: false,
+        is_deleted: false
       };
 
-      const res=await window.dataSdk.create(record);
+      const result = await safeCreateExpense(record);
 
-      if(res?.isOk){
-        document.getElementById("amount-input").value="";
-        document.getElementById("note-input").value="";
-        showScreen("main-screen");
+      document.getElementById("amount-input").value = "";
+      document.getElementById("note-input").value = "";
+      showScreen("main-screen");
+
+      if(result.ok){
         showSuccessMessage("✓ 記錄已儲存");
       }else{
-        showErrorMessage("儲存失敗，請重試");
+        showErrorMessage(`⚠️ 已改用離線儲存（${result.reason || "fallback"}）`);
+        mergeLocalStorageIntoUI();
       }
 
-      saveBtn.disabled=false;
-      btnText.textContent="儲存記錄";
+      saveBtn.disabled = false;
+      btnText.textContent = "儲存記錄";
     });
 
+    const dataHandler = {
+      onDataChanged(data){
+        const settings = data.find(r => r && r.is_settings === true);
+        const expenses = data
+          .filter(r => r && r.is_settings !== true)
+          .filter(r => r.is_deleted !== true)
+          .sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+
+        carrierSettings = settings || null;
+        allRecords = expenses;
+
+        updateUI();
+        updateCarrierDisplay();
+        refreshAnalysisIfVisible();
+      }
+    };
+
     async function init(){
+      mergeLocalStorageIntoUI();
+
       if(window.elementSdk){
         window.elementSdk.init({
           defaultConfig,
           onConfigChange,
-          mapToCapabilities:()=>({recolorables:[],borderables:[],fontEditable:undefined,fontSizeable:undefined}),
-          mapToEditPanelValues:(config)=>new Map([
-            ["app_title",config.app_title||defaultConfig.app_title],
-            ["currency_symbol",config.currency_symbol||defaultConfig.currency_symbol]
+          mapToCapabilities: (config)=>({
+            recolorables: [],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (config)=> new Map([
+            ["app_title", config.app_title || defaultConfig.app_title],
+            ["currency_symbol", config.currency_symbol || defaultConfig.currency_symbol]
           ])
         });
       }
 
       if(window.dataSdk){
-        const res=await window.dataSdk.init(dataHandler);
-        if(!res.isOk){console.error("Failed to initialize data SDK")}
+        try{
+          const result = await window.dataSdk.init(dataHandler);
+          if(!result || !result.isOk){
+            showErrorMessage("⚠️ 雲端資料初始化失敗，已使用離線資料");
+          }
+        }catch(e){
+          showErrorMessage("⚠️ 雲端資料初始化逾時，已使用離線資料");
+        }
       }
+
+      updateCarrierDisplay();
+      renderCategoryGrid();
     }
 
     init();
