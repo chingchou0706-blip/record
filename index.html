@@ -1006,17 +1006,13 @@
       btnText.textContent = "儲存中...";
 
       const record = {
-        id: uniqueId(),
         category: currentFlow.category,
         amount: amount,
         payment_method: currentFlow.paymentMethod,
-        carrier_used: !!currentFlow.carrierUsed,
-        carrier_number: (currentFlow.carrierUsed && carrierSettings && carrierSettings.carrier_number) ? carrierSettings.carrier_number : "",
-        timestamp: new Date().toISOString(),
         note: note || "",
         is_settings: false
       };
-
+      const result = await window.dataSdk.create(record);
       let result = null;
       try {
         result = await dataSdkSafe.create(record);
